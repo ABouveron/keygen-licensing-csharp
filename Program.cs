@@ -84,8 +84,13 @@ public abstract partial class Program
     fingerprint = fingerprint.Replace("-", "").ToLower();
 
     // Parse signed license file (removing cert header, newlines and footer)
+    Console.WriteLine(licenseFileRaw);
+    byte[] bytes = Encoding.Default.GetBytes(licenseFileRaw);
+    licenseFileRaw = Encoding.UTF8.GetString(bytes);
+
     var encodedPayload = Regex.Replace(licenseFileRaw,
       "(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)", "");
+    Console.WriteLine(encodedPayload);
     var payloadBytes = Convert.FromBase64String(encodedPayload);
     var payload = Encoding.UTF8.GetString(payloadBytes);
     string encryptedData;
