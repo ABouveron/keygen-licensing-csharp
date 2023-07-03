@@ -84,7 +84,8 @@ public abstract partial class Program
     fingerprint = fingerprint.Replace("-", "").ToLower();
 
     // Parse signed license file (removing cert header, newlines and footer)
-    var encodedPayload = MyRegex().Replace(licenseFileRaw, "");
+    var encodedPayload = Regex.Replace(licenseFileRaw,
+      "(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)", "");
     var payloadBytes = Convert.FromBase64String(encodedPayload);
     var payload = Encoding.UTF8.GetString(payloadBytes);
     string encryptedData;
@@ -187,7 +188,4 @@ public abstract partial class Program
       Console.WriteLine("Invalid machine file!");
     }
   }
-
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)")]
-    private static partial Regex MyRegex();
 }
