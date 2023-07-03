@@ -188,7 +188,4 @@ public abstract partial class Program
       Console.WriteLine("Invalid machine file!");
     }
   }
-
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)")]
-    private static partial Regex MyRegex();
 }
