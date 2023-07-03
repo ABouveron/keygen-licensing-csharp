@@ -193,6 +193,6 @@ public abstract partial class Program
     }
   }
 
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
+    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\r\n$)")]
     private static partial Regex MyRegex();
 }
