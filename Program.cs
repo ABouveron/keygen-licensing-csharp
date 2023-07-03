@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Json;
@@ -8,8 +9,6 @@ using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using NSec.Cryptography;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using Windows.System.Profile.SystemManufacturers;
 
 public class Program
 {
@@ -17,36 +16,6 @@ public class Program
     private const string licenseKey = "B10760-1B177D-656D1F-C03298-9AF89E-V3";
     private const string publicKey = "e8601e48b69383ba520245fd07971e983d06d22c4257cfd82304601479cee788";
     private const string fingerprint = "198e9fe586114844f6a4eaca5069b41a7ed43fb5a2df84892b69826d64573e39";
-
-    String Get_Serial_Number() 
-    {
-        try
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                return Windows.System.Profile.SystemManufacturers.SmbiosInformation.SerialNumber;
-            }
-            elif (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) {
-                with open('/sys/class/dmi/id/product_serial') as f:
-                return f.read().strip()
-            }
-            elif system == 'Darwin':
-                rm.system_profiler().get('Hardware').get('Serial Number')
-            else:
-                return null;
-            }
-            catch(Exception e) {
-                Console.WriteLine($"Impossible de récupérer le numéro de série : {e.Message}");
-                Environment.Exit(1);
-                return null;
-        }
-    }
-  
-var serial_number = Get_Serial_Number();
-if serial_number is null:
-  Console.WriteLine($"Impossible de récupérer le numéro de série : {e.Message}");
-  Environment.Exit(1);
-else:
-  print("Serial number : ", serial_number);
 
   public class LicenseFile
   {
@@ -57,6 +26,41 @@ else:
 
   public static void Main()
   {
+    private String Get_Serial_Number() 
+    {
+      try
+      {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            return Windows.System.Profile.SystemManufacturers.SmbiosInformation.SerialNumber;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+          string path = "/sys/class/dmi/id/product_serial";
+          using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.None)) {
+            byte[] b = new byte[1024];
+            UTF8Encoding temp = new UTF8Encoding(true);
+            temp.GetString(b);
+          }
+        }
+        else {
+          return null;
+        }
+      }
+      catch(Exception e) {
+          Console.WriteLine($"Impossible de récupérer le numéro de série : {e.Message}");
+          Environment.Exit(1);
+          return null;
+      }
+    }
+  
+    var serial_number = Get_Serial_Number();
+    if (serial_number is null) {
+      Console.WriteLine($"Impossible de récupérer le numéro de série : {e.Message}");
+      Environment.Exit(1);
+    }
+    else {
+      Console.WriteLine("Serial number : ", serial_number);
+    }
+
     // Parse signed license file (removing cert header, newlines and footer)
     var encodedPayload = Regex.Replace(licenseFile, "(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)", "");
     var payloadBytes = Convert.FromBase64String(encodedPayload);
