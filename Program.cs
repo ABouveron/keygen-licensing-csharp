@@ -88,7 +88,7 @@ public abstract partial class Program
     
     var bytes = Encoding.Default.GetBytes(licenseFileRaw);
     licenseFileRaw = Encoding.ASCII.GetString(bytes);
-    var encodedPayload = MyRegex().Replace(licenseFileRaw, "");
+    var encodedPayload = Regex.Replace(licenseFileRaw, "(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)", "");
 
     Console.WriteLine(encodedPayload + "\n");
 
@@ -194,7 +194,4 @@ public abstract partial class Program
       Console.WriteLine("Invalid machine file!");
     }
   }
-
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
-    private static partial Regex MyRegex();
 }
