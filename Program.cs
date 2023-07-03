@@ -35,7 +35,8 @@ public abstract partial class Program
       else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
       {
         const string path = "/sys/class/dmi/id/product_serial";
-        return File.ReadAllText(path);
+        string serialNumber = File.ReadAllText(path);
+        return serialNumber.Remove((serialNumber.Length -1), 1);
       }
       else {
         return null;
@@ -65,7 +66,6 @@ public abstract partial class Program
     var licenseFileRaw = File.ReadAllText(pathLicenseFile);
   
     string serialNumber = GetSerialNumber();
-    serialNumber = serialNumber.Remove((serialNumber.Length -1), 1);
     if (serialNumber is null) {
       Console.WriteLine("Impossible de récupérer le numéro de série.");
       Environment.Exit(1);
@@ -188,4 +188,7 @@ public abstract partial class Program
       Console.WriteLine("Invalid machine file!");
     }
   }
+
+    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)")]
+    private static partial Regex MyRegex();
 }
