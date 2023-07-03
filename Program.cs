@@ -85,12 +85,13 @@ public abstract partial class Program
 
     // Parse signed license file (removing cert header, newlines and footer)
     Console.WriteLine(licenseFileRaw);
+    
     byte[] bytes = Encoding.Default.GetBytes(licenseFileRaw);
-    licenseFileRaw = Encoding.UTF8.GetString(bytes);
+    licenseFileRaw = Encoding.ASCII.GetString(bytes);
+    string encodedPayload = Regex.Replace(licenseFileRaw, "(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)", "");
 
-    var encodedPayload = Regex.Replace(licenseFileRaw,
-      "(^-----BEGIN MACHINE FILE-----\\n|\\n|-----END MACHINE FILE-----\\n$)", "");
-    Console.WriteLine(encodedPayload);
+    Console.WriteLine(encodedPayload + "\n");
+
     var payloadBytes = Convert.FromBase64String(encodedPayload);
     var payload = Encoding.UTF8.GetString(payloadBytes);
     string encryptedData;
