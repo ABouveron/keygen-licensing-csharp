@@ -86,9 +86,7 @@ public abstract partial class Program
     // Parse signed license file (removing cert header, newlines and footer)
     Console.WriteLine(licenseFileRaw);
     
-    var bytes = Encoding.Default.GetBytes(licenseFileRaw);
-    licenseFileRaw = Encoding.ASCII.GetString(bytes);
-    var encodedPayload = Regex.Replace(licenseFileRaw, "(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)", "");
+    var encodedPayload = MyRegex().Replace(licenseFileRaw, "");
 
     Console.WriteLine(encodedPayload + "\n");
 
@@ -194,4 +192,7 @@ public abstract partial class Program
       Console.WriteLine("Invalid machine file!");
     }
   }
+
+    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
+    private static partial Regex MyRegex();
 }
