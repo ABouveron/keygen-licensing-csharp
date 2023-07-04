@@ -20,15 +20,17 @@ namespace example_csharp_licensing_Docker;
 
 public abstract partial class Program
 {
+    // Definition of all constant and variables needed to verify and decrypt the license file
     private const string LicenseKey =
         "key/TEg3TS05VldLLUpKSFUtN0NSVC1NUEtSLUg5VUwtOU1GNy03VjlK.hphP_9YaFq0uZykkfH0l9xEmogJ4yUbo3Wym7oIxYgl0uNBwocsS3GZse6U2Ti2a8B09iB5-gi_ilr3V05z4Dw==";
-
     private const string PublicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
-
+    
+    // Method to get EUID on Linux
     [DllImport("libc")]
     [SuppressMessage("Interoperability", "SYSLIB1054:Utilisez «\u00a0LibraryImportAttribute\u00a0» à la place de «\u00a0DllImportAttribute\u00a0» pour générer du code de marshaling P/Invoke au moment de la compilation")]
     private static extern uint geteuid();
 
+    // Method to get serial number of the machine
     private static string GetSerialNumber()
     {
         try
@@ -72,7 +74,7 @@ public abstract partial class Program
             if (serialNumber is null)
             {
                 Console.WriteLine(
-                    "Impossible de récupérer le numéro de série. Votre système n'est peut-être pas supporté. Liste des systèmes supportés : [Windows, Linux]");
+                    "Unable to get serial number. Is your system compatible? Compatible systems list: [Windows, Linux]");
                 Environment.Exit(1);
             }
             else
@@ -80,8 +82,8 @@ public abstract partial class Program
                 Console.WriteLine("Serial number : " + serialNumber);
             }
 
+            // Compute machine file fingerprint
             var hashAlgorithm = new Sha3Digest(512);
-
             var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
             hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
             var result = new byte[hashAlgorithm.GetDigestSize()];
@@ -161,6 +163,7 @@ public abstract partial class Program
                         var fingerprintBytes = Encoding.UTF8.GetBytes(fingerprint);
                         var sha256 = new Sha256();
 
+                        // secret is the hash of the license key and the machine fingerprint concatenated
                         secret = sha256.Hash(licenseKeyBytes.Concat(fingerprintBytes).ToArray());
                     }
                     catch (Exception e)
@@ -197,7 +200,7 @@ public abstract partial class Program
                 }
 
                 Console.WriteLine("Machine file was successfully decrypted!");
-                //Console.WriteLine($"Decrypted: {plaintext}");
+                //Console.WriteLine($"Decrypted: {plaintext}"); // Uncomment to print decrypted data
             }
             else
             {
@@ -213,9 +216,11 @@ public abstract partial class Program
         Console.WriteLine("Hello, World!");
     }
 
+    // Regex used for UNIX / OSX systems
     [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
     private static partial Regex UnixRegex();
 
+    // Regex used for Windows systems
     [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\r\n$)")]
     private static partial Regex WindowsRegex();
 
