@@ -4,3 +4,5 @@ obj/
 .vs/
 .idea/
 example-csharp-licensing-Docker.sln
+machine.lic
+license.lic

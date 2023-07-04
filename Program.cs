@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -19,8 +18,6 @@ namespace example_csharp_licensing_Docker;
 public abstract partial class Program
 {
     // Definition of all constant and variables needed to verify and decrypt the license file
-    private const string LicenseKey =
-        "key/TEg3TS05VldLLUpKSFUtN0NSVC1NUEtSLUg5VUwtOU1GNy03VjlK.hphP_9YaFq0uZykkfH0l9xEmogJ4yUbo3Wym7oIxYgl0uNBwocsS3GZse6U2Ti2a8B09iB5-gi_ilr3V05z4Dw==";
     private const string PublicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
     
     // Method to get EUID on Linux
@@ -64,8 +61,12 @@ public abstract partial class Program
     {
         try
         {
-            const string pathLicenseFile = "machine.lic";
-            var licenseFileRaw = File.ReadAllText(pathLicenseFile);
+            const string pathMachineFile = "machine.lic";
+            var machineFileRaw = File.ReadAllText(pathMachineFile);
+            
+            const string pathLicenseFile = "license.lic";
+            var licenseKey = File.ReadAllText(pathLicenseFile);
+            Console.WriteLine(licenseKey);
 
             var serialNumber = GetSerialNumber();
             if (serialNumber is null)
@@ -91,10 +92,10 @@ public abstract partial class Program
             // Parse signed license file (removing cert header, newlines and footer)
             string encodedPayload;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                encodedPayload = WindowsRegex().Replace(licenseFileRaw, "");
+                encodedPayload = WindowsRegex().Replace(machineFileRaw, "");
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
                      RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                encodedPayload = UnixRegex().Replace(licenseFileRaw, "");
+                encodedPayload = UnixRegex().Replace(machineFileRaw, "");
             else
                 encodedPayload = null;
 
@@ -156,7 +157,7 @@ public abstract partial class Program
                     // Hash license key to get decryption secret 
                     try
                     {
-                        var licenseKeyBytes = Encoding.UTF8.GetBytes(LicenseKey);
+                        var licenseKeyBytes = Encoding.UTF8.GetBytes(licenseKey);
                         var fingerprintBytes = Encoding.UTF8.GetBytes(fingerprint);
                         var sha256 = new Sha256();
 
