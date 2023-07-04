@@ -66,7 +66,6 @@ public abstract partial class Program
             
             const string pathLicenseFile = "license.lic";
             var licenseKey = File.ReadAllText(pathLicenseFile);
-            Console.WriteLine(licenseKey);
 
             var serialNumber = GetSerialNumber();
             if (serialNumber is null)
