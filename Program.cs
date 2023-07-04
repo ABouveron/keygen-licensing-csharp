@@ -1,5 +1,3 @@
-// ReSharper disable CommentTypo
-
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -27,7 +25,6 @@ public abstract partial class Program
     
     // Method to get EUID on Linux
     [DllImport("libc")]
-    [SuppressMessage("Interoperability", "SYSLIB1054:Utilisez «\u00a0LibraryImportAttribute\u00a0» à la place de «\u00a0DllImportAttribute\u00a0» pour générer du code de marshaling P/Invoke au moment de la compilation")]
     private static extern uint geteuid();
 
     // Method to get serial number of the machine
@@ -224,7 +221,6 @@ public abstract partial class Program
     [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\r\n$)")]
     private static partial Regex WindowsRegex();
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class LicenseFile
     {
         public string enc { get; set; }
