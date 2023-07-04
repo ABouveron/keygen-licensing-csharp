@@ -18,7 +18,7 @@ namespace example_csharp_licensing_Docker;
 public abstract partial class Program
 {
     // Definition of all constant and variables needed to verify and decrypt the license file
-    private const string PublicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
+    private static string _publicKey = "e8601e48b69383ba520245fd07971e983d06d22c4257cfd82304601479cee788";
     
     // Method to get EUID on Linux
     [DllImport("libc")]
@@ -57,37 +57,52 @@ public abstract partial class Program
         }
     }
 
-    public static void Main()
+    public static void Main(string[] args)
     {
         try
         {
-            const string pathMachineFile = "machine.lic";
-            var machineFileRaw = File.ReadAllText(pathMachineFile);
+            string pathLicenseFile;
+            string pathMachineFile;
+            string fingerprint;
             
-            const string pathLicenseFile = "license.lic";
-            var licenseKey = File.ReadAllText(pathLicenseFile);
-
-            var serialNumber = GetSerialNumber();
-            if (serialNumber is null)
+            if (args.Length == 0)
             {
-                Console.WriteLine(
-                    "Unable to get serial number. Is your system compatible? Compatible systems list: [Windows, Linux]");
-                Environment.Exit(1);
+                pathLicenseFile = "license.lic";
+                pathMachineFile = "machine.lic";
+                
+                var serialNumber = GetSerialNumber();
+                if (serialNumber is null)
+                {
+                    Console.WriteLine(
+                        "Unable to get serial number. Is your system compatible? Compatible systems list: [Windows, Linux]");
+                    Environment.Exit(1);
+                }
+                else
+                {
+                    Console.WriteLine("Serial number : " + serialNumber);
+                }
+
+                // Compute machine file fingerprint
+                var hashAlgorithm = new Sha3Digest(512);
+                var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
+                hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
+                var result = new byte[hashAlgorithm.GetDigestSize()];
+                hashAlgorithm.DoFinal(result, 0);
+                fingerprint = BitConverter.ToString(result);
+                fingerprint = fingerprint.Replace("-", "").ToLower();
+
+                _publicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
             }
             else
             {
-                Console.WriteLine("Serial number : " + serialNumber);
+                pathLicenseFile = args[0];
+                pathMachineFile = args[1];
+                fingerprint = args[2];
             }
 
-            // Compute machine file fingerprint
-            var hashAlgorithm = new Sha3Digest(512);
-            var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
-            hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
-            var result = new byte[hashAlgorithm.GetDigestSize()];
-            hashAlgorithm.DoFinal(result, 0);
-            var fingerprint = BitConverter.ToString(result);
-            fingerprint = fingerprint.Replace("-", "").ToLower();
-
+            var licenseKey = File.ReadAllText(pathLicenseFile);
+            var machineFileRaw = File.ReadAllText(pathMachineFile);
+            
             // Parse signed license file (removing cert header, newlines and footer)
             string encodedPayload;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -133,7 +148,7 @@ public abstract partial class Program
             var ed25519 = SignatureAlgorithm.Ed25519;
             var signatureBytes = Convert.FromBase64String(encodedSignature);
             var signingDataBytes = Encoding.UTF8.GetBytes($"machine/{encryptedData}");
-            var publicKeyBytes = Convert.FromHexString(PublicKey);
+            var publicKeyBytes = Convert.FromHexString(_publicKey);
             var key = NSec.Cryptography.PublicKey.Import(ed25519, publicKeyBytes, KeyBlobFormat.RawPublicKey);
 
             if (ed25519.Verify(key, signingDataBytes, signatureBytes))
@@ -141,7 +156,6 @@ public abstract partial class Program
                 Console.WriteLine("Machine file is valid! Decrypting...");
 
                 // Decrypt license file dataset
-                // ReSharper disable once NotAccessedVariable
                 string plaintext;
                 try
                 {
@@ -186,7 +200,6 @@ public abstract partial class Program
                     cipher.DoFinal(output, len);
 
                     // Convert decrypted bytes to string
-                    // ReSharper disable once RedundantAssignment
                     plaintext = Encoding.UTF8.GetString(output);
                 }
                 catch (Exception e)
@@ -202,6 +215,7 @@ public abstract partial class Program
             else
             {
                 Console.WriteLine("Invalid machine file!");
+                Environment.Exit(1);
             }
         }
         catch (Exception e)
