@@ -11,11 +11,11 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Management;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 using NSec.Cryptography;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
-using HashLib;
 
 public abstract partial class Program
 {
@@ -67,7 +67,7 @@ public abstract partial class Program
   
     string serialNumber = GetSerialNumber();
     if (serialNumber is null) {
-      Console.WriteLine("Impossible de récupérer le numéro de série.");
+      Console.WriteLine("Impossible de récupérer le numéro de série. Votre système n'est peut-être pas supporté. Liste des systèmes supportés : [Windows, Linux]");
       Environment.Exit(1);
     }
     else {
@@ -85,11 +85,21 @@ public abstract partial class Program
 
     // Parse signed license file (removing cert header, newlines and footer)
     Console.WriteLine(licenseFileRaw);
+
+    string encodedPayload;
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+      encodedPayload = WindowsRegex().Replace(licenseFileRaw, "");
+    }
+    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+    {
+      encodedPayload = UnixRegex().Replace(licenseFileRaw, "");
+    }
+    else {
+      encodedPayload = null;
+    }
     
-    var encodedPayload = MyRegex().Replace(licenseFileRaw, "");
-
-    Console.WriteLine(encodedPayload + "\n");
-
+    Debug.Assert(encodedPayload != null, nameof(encodedPayload) + " != null");
     var payloadBytes = Convert.FromBase64String(encodedPayload);
     var payload = Encoding.UTF8.GetString(payloadBytes);
     string encryptedData;
@@ -132,6 +142,7 @@ public abstract partial class Program
       Console.WriteLine("Machine file is valid! Decrypting...");
 
       // Decrypt license file dataset
+      // ReSharper disable once NotAccessedVariable
       string plaintext;
       try
       {
@@ -175,6 +186,7 @@ public abstract partial class Program
         cipher.DoFinal(output, len);
 
         // Convert decrypted bytes to string
+        // ReSharper disable once RedundantAssignment
         plaintext = Encoding.UTF8.GetString(output);
       }
       catch (Exception e)
@@ -194,5 +206,8 @@ public abstract partial class Program
   }
 
     [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
-    private static partial Regex MyRegex();
+    private static partial Regex UnixRegex();
+    
+    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\r\n$)")]
+    private static partial Regex WindowsRegex();
 }
