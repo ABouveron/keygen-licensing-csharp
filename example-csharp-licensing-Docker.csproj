@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>example_csharp_licensing_Docker</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>example_csharp_licensing_Docker</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="NSec.Cryptography" Version="22.4.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Portable.BouncyCastle" Version="1.9.0"/>
+        <PackageReference Include="NSec.Cryptography" Version="22.4.0"/>
+        <PackageReference Include="System.Management" Version="7.0.2"/>
+    </ItemGroup>
 
 </Project>
