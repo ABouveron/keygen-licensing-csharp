@@ -25,6 +25,10 @@ public abstract partial class Program
 
     private const string PublicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
 
+    [DllImport("libc")]
+    [SuppressMessage("Interoperability", "SYSLIB1054:Utilisez «\u00a0LibraryImportAttribute\u00a0» à la place de «\u00a0DllImportAttribute\u00a0» pour générer du code de marshaling P/Invoke au moment de la compilation")]
+    private static extern uint geteuid();
+
     private static string GetSerialNumber()
     {
         try
@@ -39,10 +43,15 @@ public abstract partial class Program
                     .ToString();
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return null;
+            if (geteuid() != 0)
+            {
+                Console.WriteLine("You must be root to get the serial number. Execute again with \"sudo dotnet run\".");
+                Environment.Exit(1);
+            }
+
             const string path = "/sys/class/dmi/id/product_serial";
             var serialNumber = File.ReadAllText(path);
             return serialNumber.Remove(serialNumber.Length - 1, 1);
-
         }
         catch (Exception e)
         {
@@ -54,143 +63,154 @@ public abstract partial class Program
 
     public static void Main()
     {
-        const string pathLicenseFile = "machine.lic";
-        var licenseFileRaw = File.ReadAllText(pathLicenseFile);
-
-        var serialNumber = GetSerialNumber();
-        if (serialNumber is null)
-        {
-            Console.WriteLine(
-                "Impossible de récupérer le numéro de série. Votre système n'est peut-être pas supporté. Liste des systèmes supportés : [Windows, Linux]");
-            Environment.Exit(1);
-        }
-        else
-        {
-            Console.WriteLine("Serial number : " + serialNumber);
-        }
-
-        var hashAlgorithm = new Sha3Digest(512);
-
-        var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
-        hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
-        var result = new byte[hashAlgorithm.GetDigestSize()];
-        hashAlgorithm.DoFinal(result, 0);
-        var fingerprint = BitConverter.ToString(result);
-        fingerprint = fingerprint.Replace("-", "").ToLower();
-
-        // Parse signed license file (removing cert header, newlines and footer)
-        string encodedPayload;
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            encodedPayload = WindowsRegex().Replace(licenseFileRaw, "");
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            encodedPayload = UnixRegex().Replace(licenseFileRaw, "");
-        else
-            encodedPayload = null;
-
-        Debug.Assert(encodedPayload != null, nameof(encodedPayload) + " != null");
-        var payloadBytes = Convert.FromBase64String(encodedPayload);
-        var payload = Encoding.UTF8.GetString(payloadBytes);
-        string encryptedData;
-        string encodedSignature;
-        string algorithm;
-
-        // Deserialize license file certificate
         try
         {
-            var lic = JsonSerializer.Deserialize<LicenseFile>(payload);
+            const string pathLicenseFile = "machine.lic";
+            var licenseFileRaw = File.ReadAllText(pathLicenseFile);
 
-            encryptedData = lic.enc;
-            encodedSignature = lic.sig;
-            algorithm = lic.alg;
-        }
-        catch (JsonException e)
-        {
-            Console.WriteLine($"Failed to parse machine file: {e.Message}");
+            var serialNumber = GetSerialNumber();
+            if (serialNumber is null)
+            {
+                Console.WriteLine(
+                    "Impossible de récupérer le numéro de série. Votre système n'est peut-être pas supporté. Liste des systèmes supportés : [Windows, Linux]");
+                Environment.Exit(1);
+            }
+            else
+            {
+                Console.WriteLine("Serial number : " + serialNumber);
+            }
 
-            return;
-        }
+            var hashAlgorithm = new Sha3Digest(512);
 
-        // Verify license file algorithm
-        if (algorithm != "aes-256-gcm+ed25519")
-        {
-            Console.WriteLine("Unsupported algorithm!");
+            var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
+            hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
+            var result = new byte[hashAlgorithm.GetDigestSize()];
+            hashAlgorithm.DoFinal(result, 0);
+            var fingerprint = BitConverter.ToString(result);
+            fingerprint = fingerprint.Replace("-", "").ToLower();
 
-            return;
-        }
+            // Parse signed license file (removing cert header, newlines and footer)
+            string encodedPayload;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                encodedPayload = WindowsRegex().Replace(licenseFileRaw, "");
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                     RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                encodedPayload = UnixRegex().Replace(licenseFileRaw, "");
+            else
+                encodedPayload = null;
 
-        // Verify signature
-        var ed25519 = SignatureAlgorithm.Ed25519;
-        var signatureBytes = Convert.FromBase64String(encodedSignature);
-        var signingDataBytes = Encoding.UTF8.GetBytes($"machine/{encryptedData}");
-        var publicKeyBytes = Convert.FromHexString(PublicKey);
-        var key = NSec.Cryptography.PublicKey.Import(ed25519, publicKeyBytes, KeyBlobFormat.RawPublicKey);
+            Debug.Assert(encodedPayload != null, nameof(encodedPayload) + " != null");
+            var payloadBytes = Convert.FromBase64String(encodedPayload);
+            var payload = Encoding.UTF8.GetString(payloadBytes);
+            string encryptedData;
+            string encodedSignature;
+            string algorithm;
 
-        if (ed25519.Verify(key, signingDataBytes, signatureBytes))
-        {
-            Console.WriteLine("Machine file is valid! Decrypting...");
-
-            // Decrypt license file dataset
-            // ReSharper disable once NotAccessedVariable
-            string plaintext;
+            // Deserialize license file certificate
             try
             {
-                var encodedCipherText = encryptedData.Split(".", 3)[0];
-                var encodedIv = encryptedData.Split(".", 3)[1];
-                var encodedTag = encryptedData.Split(".", 3)[2];
-                var cipherText = Convert.FromBase64String(encodedCipherText);
-                var iv = Convert.FromBase64String(encodedIv);
-                var tag = Convert.FromBase64String(encodedTag);
-                byte[] secret;
+                var lic = JsonSerializer.Deserialize<LicenseFile>(payload);
 
-                // Hash license key to get decryption secret 
-                try
-                {
-                    var licenseKeyBytes = Encoding.UTF8.GetBytes(LicenseKey);
-                    var fingerprintBytes = Encoding.UTF8.GetBytes(fingerprint);
-                    var sha256 = new Sha256();
-
-                    secret = sha256.Hash(licenseKeyBytes.Concat(fingerprintBytes).ToArray());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Failed to hash license key: {e.Message}");
-
-                    return;
-                }
-
-                // Init AES-GCM
-                var cipherParams = new AeadParameters(new KeyParameter(secret), 128, iv);
-                var aesEngine = new AesEngine();
-                var cipher = new GcmBlockCipher(aesEngine);
-
-                cipher.Init(false, cipherParams);
-
-                // Concat auth tag to ciphertext
-                var input = cipherText.Concat(tag).ToArray();
-                var output = new byte[cipher.GetOutputSize(input.Length)];
-
-                // Decrypt
-                var len = cipher.ProcessBytes(input, 0, input.Length, output, 0);
-                cipher.DoFinal(output, len);
-
-                // Convert decrypted bytes to string
-                // ReSharper disable once RedundantAssignment
-                plaintext = Encoding.UTF8.GetString(output);
+                encryptedData = lic.enc;
+                encodedSignature = lic.sig;
+                algorithm = lic.alg;
             }
-            catch (Exception e)
+            catch (JsonException e)
             {
-                Console.WriteLine($"Failed to decrypt machine file: {e.Message}");
+                Console.WriteLine($"Failed to parse machine file: {e.Message}");
 
                 return;
             }
 
-            Console.WriteLine("Machine file was successfully decrypted!");
-            //Console.WriteLine($"Decrypted: {plaintext}");
+            // Verify license file algorithm
+            if (algorithm != "aes-256-gcm+ed25519")
+            {
+                Console.WriteLine("Unsupported algorithm!");
+
+                return;
+            }
+
+            // Verify signature
+            var ed25519 = SignatureAlgorithm.Ed25519;
+            var signatureBytes = Convert.FromBase64String(encodedSignature);
+            var signingDataBytes = Encoding.UTF8.GetBytes($"machine/{encryptedData}");
+            var publicKeyBytes = Convert.FromHexString(PublicKey);
+            var key = NSec.Cryptography.PublicKey.Import(ed25519, publicKeyBytes, KeyBlobFormat.RawPublicKey);
+
+            if (ed25519.Verify(key, signingDataBytes, signatureBytes))
+            {
+                Console.WriteLine("Machine file is valid! Decrypting...");
+
+                // Decrypt license file dataset
+                // ReSharper disable once NotAccessedVariable
+                string plaintext;
+                try
+                {
+                    var encodedCipherText = encryptedData.Split(".", 3)[0];
+                    var encodedIv = encryptedData.Split(".", 3)[1];
+                    var encodedTag = encryptedData.Split(".", 3)[2];
+                    var cipherText = Convert.FromBase64String(encodedCipherText);
+                    var iv = Convert.FromBase64String(encodedIv);
+                    var tag = Convert.FromBase64String(encodedTag);
+                    byte[] secret;
+
+                    // Hash license key to get decryption secret 
+                    try
+                    {
+                        var licenseKeyBytes = Encoding.UTF8.GetBytes(LicenseKey);
+                        var fingerprintBytes = Encoding.UTF8.GetBytes(fingerprint);
+                        var sha256 = new Sha256();
+
+                        secret = sha256.Hash(licenseKeyBytes.Concat(fingerprintBytes).ToArray());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Failed to hash license key: {e.Message}");
+
+                        return;
+                    }
+
+                    // Init AES-GCM
+                    var cipherParams = new AeadParameters(new KeyParameter(secret), 128, iv);
+                    var aesEngine = new AesEngine();
+                    var cipher = new GcmBlockCipher(aesEngine);
+
+                    cipher.Init(false, cipherParams);
+
+                    // Concat auth tag to ciphertext
+                    var input = cipherText.Concat(tag).ToArray();
+                    var output = new byte[cipher.GetOutputSize(input.Length)];
+
+                    // Decrypt
+                    var len = cipher.ProcessBytes(input, 0, input.Length, output, 0);
+                    cipher.DoFinal(output, len);
+
+                    // Convert decrypted bytes to string
+                    // ReSharper disable once RedundantAssignment
+                    plaintext = Encoding.UTF8.GetString(output);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Failed to decrypt machine file: {e.Message}");
+
+                    return;
+                }
+
+                Console.WriteLine("Machine file was successfully decrypted!");
+                //Console.WriteLine($"Decrypted: {plaintext}");
+            }
+            else
+            {
+                Console.WriteLine("Invalid machine file!");
+            }
         }
-        else
+        catch (Exception e)
         {
-            Console.WriteLine("Invalid machine file!");
+            Console.WriteLine($"Failed to read machine file: {e.Message}");
+            Environment.Exit(1);
         }
+
+        Console.WriteLine("Hello, World!");
     }
 
     [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\n|-----END MACHINE FILE-----\n$)")]
