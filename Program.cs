@@ -232,7 +232,7 @@ public abstract partial class Program
     private static partial Regex UnixRegex();
 
     // Regex used for Windows systems
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|\r\n|-----END MACHINE FILE-----\n$)")]
+    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\n$|-----END MACHINE FILE-----\r\n$)")]
     private static partial Regex WindowsRegex();
 
     public class LicenseFile
