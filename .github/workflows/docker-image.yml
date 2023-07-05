@@ -24,4 +24,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag license-example-csharp:$(date +%s)
     - name: Run the Docker image
-      run: docker run -it license-example-csharp
+      run: docker run -i license-example-csharp:latest
