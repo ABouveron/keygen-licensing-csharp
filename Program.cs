@@ -91,7 +91,9 @@ public abstract partial class Program
                 fingerprint = BitConverter.ToString(result);
                 fingerprint = fingerprint.Replace("-", "").ToLower();
 
-                _publicKey = "7757a98a8188c31ae7a21d76a865800bf77bcf3476f7abbbdf5bb6a4afbe9a23";
+                Console.WriteLine("Replace \"PUBLIC_KEY\" line 96 with your public key (\"Ed25519 128-bit Verify Key\") available in https://app.keygen.sh/settings. Then comment lines 94 & 95 and run again.");
+                Environment.Exit(1);  // Comment this line to continue
+                _publicKey = "PUBLIC_KEY";
             }
             else
             {
