@@ -22,6 +22,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag license-example-csharp:$(date +%s)
+      run: docker build . --file Dockerfile --tag license-example-csharp:latest
     - name: Run the Docker image
-      run: docker run -i license-example-csharp:$(date +%s)
+      run: docker run -i license-example-csharp:latest
