@@ -137,7 +137,7 @@ public abstract partial class Program
             var signatureBytes = Convert.FromBase64String(encodedSignature);
             var signingDataBytes = Encoding.UTF8.GetBytes($"machine/{encryptedData}");
             var publicKeyBytes = Convert.FromHexString(_publicKey);
-            var key = NSec.Cryptography.PublicKey.Import(ed25519, publicKeyBytes, KeyBlobFormat.RawPublicKey);
+            var key = PublicKey.Import(ed25519, publicKeyBytes, KeyBlobFormat.RawPublicKey);
 
             if (ed25519.Verify(key, signingDataBytes, signatureBytes))
             {
