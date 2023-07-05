@@ -14,5 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Test the code
+      run: cp -R examples/ bin/Debug/net7.0/ ; dotnet test
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag license-example-csharp:$(date +%s)
+    - name: Run the Docker image
+      run: docker run -it license-example-csharp:latest
