@@ -194,7 +194,6 @@ public abstract partial class Program
                 catch (Exception e)
                 {
                     Console.WriteLine($"Failed to decrypt machine file: {e.Message}");
-
                     return;
                 }
 
