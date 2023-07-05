@@ -10,7 +10,7 @@ public abstract partial class Program
     private static extern uint geteuid();
 
     // Method to get serial number of the machine
-    private static string GetSerialNumber()
+    private static string? GetSerialNumber()
     {
         try
         {
@@ -90,7 +90,7 @@ public abstract partial class Program
             var machineFileRaw = File.ReadAllText(pathMachineFile);
             
             // Parse signed license file (removing cert header, newlines and footer)
-            string encodedPayload;
+            string? encodedPayload;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 encodedPayload = WindowsRegex().Replace(machineFileRaw, "");
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
@@ -102,15 +102,16 @@ public abstract partial class Program
             Debug.Assert(encodedPayload != null, nameof(encodedPayload) + " != null");
             var payloadBytes = Convert.FromBase64String(encodedPayload);
             var payload = Encoding.UTF8.GetString(payloadBytes);
-            string encryptedData;
-            string encodedSignature;
-            string algorithm;
+            string? encryptedData;
+            string? encodedSignature;
+            string? algorithm;
 
             // Deserialize license file certificate
             try
             {
                 var lic = JsonSerializer.Deserialize<LicenseFile>(payload);
 
+                Debug.Assert(lic != null, nameof(lic) + " != null");
                 encryptedData = lic.enc;
                 encodedSignature = lic.sig;
                 algorithm = lic.alg;
@@ -132,6 +133,7 @@ public abstract partial class Program
 
             // Verify signature
             var ed25519 = SignatureAlgorithm.Ed25519;
+            Debug.Assert(encodedSignature != null, nameof(encodedSignature) + " != null");
             var signatureBytes = Convert.FromBase64String(encodedSignature);
             var signingDataBytes = Encoding.UTF8.GetBytes($"machine/{encryptedData}");
             var publicKeyBytes = Convert.FromHexString(_publicKey);
@@ -145,6 +147,7 @@ public abstract partial class Program
                 string plaintext;
                 try
                 {
+                    Debug.Assert(encryptedData != null, nameof(encryptedData) + " != null");
                     var encodedCipherText = encryptedData.Split(".", 3)[0];
                     var encodedIv = encryptedData.Split(".", 3)[1];
                     var encodedTag = encryptedData.Split(".", 3)[2];
@@ -223,8 +226,8 @@ public abstract partial class Program
 
     public class LicenseFile
     {
-        public string enc { get; set; }
-        public string sig { get; set; }
-        public string alg { get; set; }
+        public string? enc { get; set; }
+        public string? sig { get; set; }
+        public string? alg { get; set; }
     }
 }
