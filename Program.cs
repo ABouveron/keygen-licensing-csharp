@@ -213,6 +213,11 @@ public abstract partial class Program
         }
 
         Console.WriteLine("Hello, World!");
+        while (true)
+        {
+            Console.WriteLine("Ctrl-C to exit...");
+            Thread.Sleep(1000);
+        }
     }
 
     // Regex used for UNIX / OSX systems
