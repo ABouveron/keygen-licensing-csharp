@@ -3,8 +3,9 @@ namespace example_csharp_licensing_Docker;
 public abstract partial class Program
 {
     // Definition of all constant and variables needed to verify and decrypt the license file
-    private static string _publicKey = "e8601e48b69383ba520245fd07971e983d06d22c4257cfd82304601479cee788";
-    
+    private static string _publicKey =
+        "e8601e48b69383ba520245fd07971e983d06d22c4257cfd82304601479cee788";
+
     // Method to get EUID on Linux
     [DllImport("libc")]
     private static extern uint geteuid();
@@ -19,14 +20,15 @@ public abstract partial class Program
                     .Get()
                     .Cast<ManagementObject>()
                     .First()
-                    .Properties["SerialNumber"]
-                    .Value
-                    .ToString();
+                    .Properties["SerialNumber"].Value.ToString();
 
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return null;
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return null;
             if (geteuid() != 0)
             {
-                Console.WriteLine("You must be root to get the serial number. Execute again with \"sudo dotnet run\".");
+                Console.WriteLine(
+                    "You must be root to get the serial number. Execute again with \"sudo dotnet run\"."
+                );
                 return null;
             }
 
@@ -48,17 +50,18 @@ public abstract partial class Program
             string pathLicenseFile;
             string pathMachineFile;
             string fingerprint;
-            
+
             if (args.Length == 0)
             {
                 pathLicenseFile = "license.lic";
                 pathMachineFile = "machine.lic";
-                
+
                 var serialNumber = GetSerialNumber();
                 if (serialNumber is null)
                 {
                     Console.WriteLine(
-                        "Unable to get serial number. Is your system compatible? Compatible systems list: [Windows, Linux]");
+                        "Unable to get serial number. Is your system compatible? Compatible systems list: [Windows, Linux]"
+                    );
                     return;
                 }
                 else
@@ -88,13 +91,15 @@ public abstract partial class Program
 
             var licenseKey = File.ReadAllText(pathLicenseFile);
             var machineFileRaw = File.ReadAllText(pathMachineFile);
-            
+
             // Parse signed license file (removing cert header, newlines and footer)
             string? encodedPayload;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 encodedPayload = WindowsRegex().Replace(machineFileRaw, "");
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-                     RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            else if (
+                RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+            )
                 encodedPayload = UnixRegex().Replace(machineFileRaw, "");
             else
                 encodedPayload = null;
@@ -156,7 +161,7 @@ public abstract partial class Program
                     var tag = Convert.FromBase64String(encodedTag);
                     byte[] secret;
 
-                    // Hash license key to get decryption secret 
+                    // Hash license key to get decryption secret
                     try
                     {
                         var licenseKeyBytes = Encoding.UTF8.GetBytes(licenseKey);
@@ -225,7 +230,9 @@ public abstract partial class Program
     private static partial Regex UnixRegex();
 
     // Regex used for Windows systems
-    [GeneratedRegex("(^-----BEGIN MACHINE FILE-----\n|^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\n$|-----END MACHINE FILE-----\r\n$)")]
+    [GeneratedRegex(
+        "(^-----BEGIN MACHINE FILE-----\n|^-----BEGIN MACHINE FILE-----\r\n|\r\n|-----END MACHINE FILE-----\n$|-----END MACHINE FILE-----\r\n$)"
+    )]
     private static partial Regex WindowsRegex();
 
     public class LicenseFile
