@@ -124,6 +124,30 @@ public abstract class KeygenApiTest
         return client.Execute(request);
     }
 
+    private static RestResponse GroupCreation(string name, int maxUsers = default, int maxLicenses = default, int maxMachines = default)
+    {
+        var client = new RestClient("https://api.keygen.sh/v1/accounts/" + Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID"));
+        var request = new RestRequest("groups", Method.Post);
+ 
+        request.AddHeader("Content-Type", "application/vnd.api+json");
+        request.AddHeader("Accept", "application/vnd.api+json");
+        request.AddHeader("Authorization", "Bearer " + Environment.GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN"));
+ 
+        request.AddJsonBody(new {
+            data = new {
+                type = "groups",
+                attributes = new {
+                    name,
+                    maxUsers,
+                    maxLicenses,
+                    maxMachines
+                }
+            }
+        });
+ 
+        return client.Execute(request);
+    }
+
     public static void Main(string[] args)
     {
         DotNetEnv.Env.Load();
