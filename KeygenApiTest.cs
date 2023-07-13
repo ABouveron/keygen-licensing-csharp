@@ -31,28 +31,7 @@ public abstract class KeygenApiTest
         return client.Execute(request);
     }
 
-    private static RestResponse GenEnvToken()
-    {
-        var client = new RestClient(
-            "https://api.keygen.sh/v1/accounts/"
-                + Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
-        );
-
-        var request = new RestRequest(
-            "environments/b3ee7987-5309-4c61-9df1-c156a216db7a/tokens",
-            Method.Post
-        );
-
-        request.AddHeader("Accept", "application/vnd.api+json");
-        request.AddHeader(
-            "Authorization",
-            "Bearer " + Environment.GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN")
-        );
-
-        return client.Execute(request);
-    }
-
-    private static void LicenseAuth(string licenseId)
+    private static void LicenseAuth(string licenseId, string licenseKey, string name, string platform, string fingerprint)
     {
         const string fingerprint = "PC_ABouveron";
         const string platform = "Linux";
