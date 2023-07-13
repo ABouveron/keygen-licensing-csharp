@@ -64,10 +64,8 @@ public abstract partial class Program
                     );
                     return;
                 }
-                else
-                {
-                    Console.WriteLine("Serial number : " + serialNumber);
-                }
+
+                Console.WriteLine("Serial number : " + serialNumber);
 
                 // Compute machine file fingerprint
                 var hashAlgorithm = new Sha3Digest(512);
