@@ -6,11 +6,16 @@ public abstract class KeygenApiTest
 {
     private static RestResponse GenAdminToken()
     {
-        Console.WriteLine("Enter your Keygen account email:");
-        var email = Console.ReadLine();
-        Console.WriteLine("Enter your Keygen account password:");
-        var auth = new AuthPassword();
-        var password = auth.Password;
+        var email = Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_EMAIL");
+        var password = Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_PASSWORD");
+        if (email == null || password == null)
+        {
+            Console.WriteLine("Enter your Keygen account email:");
+            email = Console.ReadLine();
+            Console.WriteLine("Enter your Keygen account password:");
+            var auth = new AuthPassword();
+            password = auth.Password;
+        }
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{email}:{password}"));
 
         var client = new RestClient(
