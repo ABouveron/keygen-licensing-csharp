@@ -2,15 +2,13 @@ namespace example_csharp_licensing_Docker;
 
 public class AuthPassword
 {
-    public string Password { get; }
-
     public AuthPassword()
     {
         var pass = string.Empty;
         ConsoleKey key;
         do
         {
-            var keyInfo = Console.ReadKey(intercept: true);
+            var keyInfo = Console.ReadKey(true);
             key = keyInfo.Key;
 
             if (key == ConsoleKey.Backspace && pass.Length > 0)
@@ -26,4 +24,6 @@ public class AuthPassword
 
         Password = pass;
     }
+
+    public string Password { get; }
 }
