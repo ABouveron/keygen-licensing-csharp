@@ -71,46 +71,35 @@ public abstract class KeygenApiTest
         );
     }
 
-    public static void ProductAuthentication(string licenseId)
+    private static RestResponse ProductCreation(string name, string? url = null, string[]? platforms = null, string? distroStrat = null)
     {
-        const string fingerprint = "PC_ABouveron";
-        const string platform = "Linux";
-        const string name = "ABouveron";
+        var client = new RestClient("https://api.keygen.sh/v1/accounts/" + Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID"));
+        var request = new RestRequest("products", Method.Post);
+ 
+        request.AddHeader("Content-Type", "application/vnd.api+json");
+        request.AddHeader("Accept", "application/vnd.api+json");
+        request.AddHeader("Authorization", "Bearer " + Environment.GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN"));
 
-        var jsonProdAuth = new JsonKeygen
+        distroStrat = distroStrat switch
         {
-            data = new Data
-            {
-                type = "machines",
-                attributes = new Attributes
-                {
-                    fingerprint = fingerprint,
-                    platform = platform,
-                    name = name
-                },
-                relationships = new Relationships
-                {
-                    license = new License
-                    {
-                        data = new LicenseData { type = "licenses", id = licenseId }
-                    }
+            "OPEN" => DistributionStrategy.Open,
+            "CLOSED" => DistributionStrategy.Closed,
+            _ => DistributionStrategy.Licensed
+        };
+
+        request.AddJsonBody(new {
+            data = new {
+                type = "products",
+                attributes = new {
+                    name,
+                    url,
+                    platforms,
+                    distributionStrategy = distroStrat
                 }
             }
-        };
-        Console.WriteLine(JsonConvert.SerializeObject(jsonProdAuth));
-        Console.WriteLine(
-            BashCmd.Execute(
-                "curl -X POST https://api.keygen.sh/v1/accounts/demo/machines "
-                    + "-H 'Content-Type: application/vnd.api+json' "
-                    + "-H 'Accept: application/vnd.api+json' "
-                    + "-H 'Authorization: Bearer "
-                    + Environment.GetEnvironmentVariable("KEYGEN_PRODUCT_TOKEN")
-                    + "' "
-                    + "-d '"
-                    + JsonConvert.SerializeObject(jsonProdAuth)
-                    + "'"
-            )
-        );
+        });
+ 
+        return client.Execute(request);
     }
 
     public static void Main(string[] args)
@@ -123,5 +112,6 @@ public abstract class KeygenApiTest
         const string platform = "Linux";
         const string name = "ABouveron";
         LicenseAuth(licenseid, licenseKey, name, platform, fingerprint);
+        Console.WriteLine(ProductCreation("Example Product2").Content);
     }
 }
