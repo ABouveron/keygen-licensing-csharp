@@ -37,8 +37,4 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="target\" />
-  </ItemGroup>
-
 </Project>
