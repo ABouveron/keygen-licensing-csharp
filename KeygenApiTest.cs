@@ -33,12 +33,6 @@ public abstract class KeygenApiTest
 
     private static void LicenseAuth(string licenseId, string licenseKey, string name, string platform, string fingerprint)
     {
-        const string fingerprint = "PC_ABouveron";
-        const string platform = "Linux";
-        const string name = "ABouveron";
-        const string licenseKey =
-            "key/SlVFQy1YVzNFLVZYNEwtRUtXSy1VWEYzLUpNUkMtOUNIRi1FN0g5.RWwEs-2P3vOMZPIgoCdkPks6b_kkpp_yrZUmTB-pIXhcLvqYcJKOdI79oBu2qbQbwvrVFG77cSHeZZc1klT7Dg==";
-
         var jsonLicenseKeyAuth = new JsonKeygen
         {
             data = new Data
@@ -123,7 +117,11 @@ public abstract class KeygenApiTest
     {
         DotNetEnv.Env.Load();
         Console.WriteLine(GenAdminToken().Content);
-        //const string licenseid = "651acd6a-0171-4b19-b4fd-0094a35a5186";
-        //LicenseAuth(licenseid);
+        const string licenseid = "651acd6a-0171-4b19-b4fd-0094a35a5186";
+        const string licenseKey = "key/SlVFQy1YVzNFLVZYNEwtRUtXSy1VWEYzLUpNUkMtOUNIRi1FN0g5.RWwEs-2P3vOMZPIgoCdkPks6b_kkpp_yrZUmTB-pIXhcLvqYcJKOdI79oBu2qbQbwvrVFG77cSHeZZc1klT7Dg==";
+        const string fingerprint = "PC_ABouveron";
+        const string platform = "Linux";
+        const string name = "ABouveron";
+        LicenseAuth(licenseid, licenseKey, name, platform, fingerprint);
     }
 }
