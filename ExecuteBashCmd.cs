@@ -18,7 +18,7 @@ public class BashCmd
         };
 
         Console.WriteLine("/bin/bash -c \"" + command + "\"");
-        
+
         process.Start();
         process.WaitForExit();
 

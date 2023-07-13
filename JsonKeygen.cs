@@ -1,7 +1,6 @@
 // ReSharper disable InconsistentNaming
 namespace example_csharp_licensing_Docker;
 
-    
 public class JsonKeygen
 {
     public Data? data;
