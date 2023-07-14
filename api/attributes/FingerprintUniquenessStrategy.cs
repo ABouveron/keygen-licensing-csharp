@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class FingerprintUniquenessStrategy
+public abstract class FingerprintUniquenessStrategy
 {
     public const string UniquePerAccount = "UNIQUE_PER_ACCOUNT";
     public const string UniquePerProduct = "UNIQUE_PER_PRODUCT";

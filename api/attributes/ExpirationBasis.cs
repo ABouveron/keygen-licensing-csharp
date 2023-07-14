@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class ExpirationBasis
+public abstract class ExpirationBasis
 {
     public const string FromCreation = "FROM_CREATION";
     public const string FromFirstValidation = "FROM_FIRST_VALIDATION";

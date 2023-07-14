@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class HeartbeatResurrectionStrategy
+public abstract class HeartbeatResurrectionStrategy
 {
     public const string NoRevive = "NO_REVIVE";
     public const string OneMinuteRevive = "1_MINUTE_REVIVE";

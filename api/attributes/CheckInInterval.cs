@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class ChekInInterval
+public abstract class CheckInInterval
 {
     public const string Day = "day";
     public const string Week = "week";

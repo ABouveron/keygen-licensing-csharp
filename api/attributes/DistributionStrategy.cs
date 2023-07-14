@@ -1,6 +1,5 @@
-namespace example_csharp_licensing_Docker;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public abstract class DistributionStrategy
 {
     public const string Open = "OPEN";

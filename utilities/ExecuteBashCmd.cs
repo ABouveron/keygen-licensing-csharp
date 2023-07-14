@@ -1,6 +1,8 @@
-namespace example_csharp_licensing_Docker;
+using Process = System.Diagnostics.Process;
 
-public class BashCmd
+namespace example_csharp_licensing_Docker.utilities;
+
+public abstract class BashCmd
 {
     public static string Execute(string command)
     {
@@ -16,9 +18,6 @@ public class BashCmd
                 CreateNoWindow = true
             }
         };
-
-        Console.WriteLine("/bin/bash -c \"" + command + "\"");
-
         process.Start();
         process.WaitForExit();
 

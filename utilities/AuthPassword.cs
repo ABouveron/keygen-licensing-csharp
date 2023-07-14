@@ -1,8 +1,8 @@
-namespace example_csharp_licensing_Docker;
+namespace example_csharp_licensing_Docker.utilities;
 
-public class AuthPassword
+public abstract class AuthPassword
 {
-    public AuthPassword()
+    static AuthPassword()
     {
         var pass = string.Empty;
         ConsoleKey key;
@@ -25,5 +25,5 @@ public class AuthPassword
         Password = pass;
     }
 
-    public string Password { get; }
+    public static string Password { get; }
 }

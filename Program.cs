@@ -2,7 +2,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace example_csharp_licensing_Docker;
 
-public abstract partial class Program
+public abstract class Program
 {
     // Definition of all constant and variables needed to verify and decrypt the license file
     private static string _publicKey =
@@ -45,7 +45,7 @@ public abstract partial class Program
         }
     }
 
-    public static void Main(string[] args)
+    public static void Main_aux(string[] args)
     {
         try
         {

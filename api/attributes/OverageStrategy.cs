@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class OverageStrategy
+public abstract class OverageStrategy
 {
     public const string AlwaysAllowOverage = "ALWAYS_ALLOW_OVERAGE";
     public const string AllowOne25TimesOverage = "ALLOW_ONE_25X_OVERAGE";

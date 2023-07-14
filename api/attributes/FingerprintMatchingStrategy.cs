@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class FingerprintMatchingStrategy
+public abstract class FingerprintMatchingStrategy
 {
     public const string MatchAny = "MATCH_ANY";
     public const string MatchMost = "MATCH_MOST";

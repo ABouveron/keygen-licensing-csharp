@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class ExpirationStrategy
+public abstract class ExpirationStrategy
 {
     public const string RestrictAccess = "RESTRICT_ACCESS";
     public const string RevokeAccess = "REVOKE_ACCESS";

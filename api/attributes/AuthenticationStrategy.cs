@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class AuthenticationStrategy
+public abstract class AuthenticationStrategy
 {
     public const string Token = "TOKEN";
     public const string License = "LICENSE";

@@ -14,3 +14,6 @@ global using RestSharp;
 global using System.Diagnostics.CodeAnalysis;
 global using DotNetEnv;
 global using Newtonsoft.Json;
+global using example_csharp_licensing_Docker.utilities;
+global using example_csharp_licensing_Docker.api;
+global using System.Net.NetworkInformation;

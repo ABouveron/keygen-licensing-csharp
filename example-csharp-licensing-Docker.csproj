@@ -12,13 +12,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotNetEnv" Version="2.5.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
-        <PackageReference Include="RestSharp" Version="110.2.0" />
-        <PackageReference Include="xunit" Version="*" />
-        <PackageReference Include="Portable.BouncyCastle" Version="*" />
-        <PackageReference Include="NSec.Cryptography" Version="*" />
+        <PackageReference Include="DotNetEnv" Version="2.5.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*"/>
+        <PackageReference Include="RestSharp" Version="110.2.0"/>
+        <PackageReference Include="xunit" Version="*"/>
+        <PackageReference Include="Portable.BouncyCastle" Version="*"/>
+        <PackageReference Include="NSec.Cryptography" Version="*"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -28,13 +28,13 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <!-- packages concerned by vulnerabilities -->
-        <PackageReference Include="System.Management" Version="*" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="*" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="Microsoft.Windows.Compatibility" Version="*" />
-        <PackageReference Include="System.Security.Cryptography.Xml" Version="*" />
+        <PackageReference Include="System.Management" Version="*"/>
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="*"/>
+        <PackageReference Include="System.Net.Http" Version="4.3.4"/>
+        <PackageReference Include="Microsoft.Windows.Compatibility" Version="*"/>
+        <PackageReference Include="System.Security.Cryptography.Xml" Version="*"/>
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-namespace example_csharp_licensing_Docker.api;
+namespace example_csharp_licensing_Docker.api.attributes;
 
-public class TransferStrategy
+public abstract class TransferStrategy
 {
     public const string ResetExpiry = "RESET_EXPIRY";
     public const string KeepExpiry = "KEEP_EXPIRY";

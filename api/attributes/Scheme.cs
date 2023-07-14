@@ -1,4 +1,4 @@
-namespace example_csharp_licensing_Docker;
+namespace example_csharp_licensing_Docker.api.attributes;
 
 public abstract class Scheme
 {

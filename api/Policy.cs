@@ -1,3 +1,5 @@
+using example_csharp_licensing_Docker.api.attributes;
+
 namespace example_csharp_licensing_Docker.api;
 
 public class Policy
@@ -54,7 +56,7 @@ public class Policy
         scheme = scheme switch
         {
             "RSA_2048_PKCS1_PSS_SIGN_V2" => Scheme.Rsa2048Pkcs1PssSignV2,
-            "RSA_2048_PKCS1_SIGN_V2" => Scheme.Rsa2048Pkcs1PssSignV2,
+            "RSA_2048_PKCS1_SIGN_V2" => Scheme.Rsa2048Pkcs1SignV2,
             "RSA_2048_PKCS1_ENCRYPT" => Scheme.Rsa2048Pkcs1Encrypt,
             "RSA_2048_JWT_RS256" => Scheme.Rsa2048JwtRs256,
             _ => Scheme.Ed25519Sign
@@ -62,10 +64,10 @@ public class Policy
 
         checkInInterval = checkInInterval switch
         {
-            "week" => ChekInInterval.Week,
-            "month" => ChekInInterval.Month,
-            "year" => ChekInInterval.Year,
-            _ => ChekInInterval.Day
+            "week" => CheckInInterval.Week,
+            "month" => CheckInInterval.Month,
+            "year" => CheckInInterval.Year,
+            _ => CheckInInterval.Day
         };
 
         heartbeatCullStrategy = heartbeatCullStrategy switch

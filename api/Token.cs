@@ -11,8 +11,7 @@ public class Token
             Console.WriteLine("Enter your Keygen account email:");
             email = Console.ReadLine();
             Console.WriteLine("Enter your Keygen account password:");
-            var auth = new AuthPassword();
-            password = auth.Password;
+            password = AuthPassword.Password;
         }
 
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{email}:{password}"));

@@ -1,8 +1,8 @@
 namespace example_csharp_licensing_Docker.api;
 
-public class Authentication
+public abstract class Authentication
 {
-    private static void LicenseAuth(
+    public static void LicenseAuth(
         string licenseId,
         string licenseKey,
         string name,
@@ -30,7 +30,6 @@ public class Authentication
                 }
             }
         };
-        Console.WriteLine(JsonConvert.SerializeObject(jsonLicenseKeyAuth));
         Console.WriteLine(
             BashCmd.Execute(
                 "curl -X POST https://api.keygen.localhost/v1/accounts/"
