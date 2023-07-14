@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 
-namespace example_csharp_licensing_Docker;
+namespace example_csharp_licensing_Docker.api;
 
 public class JsonKeygen
 {
@@ -25,11 +25,6 @@ public class LicenseData
 {
     public string? id;
     public string? type;
-}
-
-public class License
-{
-    public LicenseData? data;
 }
 
 public class Relationships

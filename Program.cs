@@ -1,3 +1,5 @@
+using JsonSerializer = System.Text.Json.JsonSerializer;
+
 namespace example_csharp_licensing_Docker;
 
 public abstract partial class Program
@@ -119,9 +121,9 @@ public abstract partial class Program
                 encodedSignature = lic.sig;
                 algorithm = lic.alg;
             }
-            catch (JsonException e)
+            catch (Exception e)
             {
-                Console.WriteLine($"Failed to parse machine file: {e.Message}");
+                Console.WriteLine((object?)$"Failed to parse machine file: {e.Message}");
 
                 return;
             }
@@ -147,6 +149,7 @@ public abstract partial class Program
                 Console.WriteLine("Machine file is valid! Decrypting...");
 
                 // Decrypt license file dataset
+                // ReSharper disable once NotAccessedVariable
                 string plaintext;
                 try
                 {
@@ -192,6 +195,7 @@ public abstract partial class Program
                     cipher.DoFinal(output, len);
 
                     // Convert decrypted bytes to string
+                    // ReSharper disable once RedundantAssignment
                     plaintext = Encoding.UTF8.GetString(output);
                 }
                 catch (Exception e)
@@ -233,6 +237,7 @@ public abstract partial class Program
     )]
     private static partial Regex WindowsRegex();
 
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class LicenseFile
     {
         public string? enc { get; set; }
