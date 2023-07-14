@@ -31,3 +31,8 @@ public class Relationships
 {
     public License? license;
 }
+
+public partial class License
+{
+    public LicenseData? data;
+}
