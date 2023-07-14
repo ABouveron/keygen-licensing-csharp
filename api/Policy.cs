@@ -41,8 +41,10 @@ public class Policy
     )
     {
         var client = new RestClient(
-            "https://api.keygen.localhost/v1/accounts/"
-                + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
+            "https://"
+            + CheckInternet.Api
+            + "/v1/accounts/"
+            + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
         );
         var request = new RestRequest("policies", Method.Post);
 

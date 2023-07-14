@@ -5,8 +5,10 @@ public class Entitlement
     public static RestResponse EntitlementCreation(string name, string code)
     {
         var client = new RestClient(
-            "https://api.keygen.localhost/v1/accounts/"
-                + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
+            "https://"
+            + CheckInternet.Api
+            + "/v1/accounts/"
+            + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
         );
         var request = new RestRequest("entitlements", Method.Post);
 

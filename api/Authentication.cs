@@ -32,17 +32,19 @@ public abstract class Authentication
         };
         Console.WriteLine(
             BashCmd.Execute(
-                "curl -X POST https://api.keygen.localhost/v1/accounts/"
-                    + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
-                    + "/machines "
-                    + "-H 'Content-Type: application/vnd.api+json' "
-                    + "-H 'Accept: application/vnd.api+json' "
-                    + "-H 'Authorization: License "
-                    + licenseKey
-                    + "' "
-                    + "-d '"
-                    + JsonConvert.SerializeObject(jsonLicenseKeyAuth)
-                    + "'"
+                "curl -X POST https://"
+                + CheckInternet.Api
+                + "/v1/accounts/"
+                + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
+                + "/machines "
+                + "-H 'Content-Type: application/vnd.api+json' "
+                + "-H 'Accept: application/vnd.api+json' "
+                + "-H 'Authorization: License "
+                + licenseKey
+                + "' "
+                + "-d '"
+                + JsonConvert.SerializeObject(jsonLicenseKeyAuth)
+                + "'"
             )
         );
     }

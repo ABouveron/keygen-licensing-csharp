@@ -5,7 +5,7 @@ namespace example_csharp_licensing_Docker.api;
 
 public abstract class TestApi
 {
-    public static void Main(string[] args)
+    public static void Main_aux(string[] args)
     {
         Env.Load();
         Console.WriteLine(Product.ProductCreation("test", "https://test.com").Content);

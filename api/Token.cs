@@ -17,8 +17,10 @@ public class Token
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{email}:{password}"));
 
         var client = new RestClient(
-            "https://api.keygen.localhost/v1/accounts/"
-                + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
+            "https://"
+            + CheckInternet.Api
+            + "/v1/accounts/"
+            + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
         );
         var request = new RestRequest("tokens", Method.Post);
 
