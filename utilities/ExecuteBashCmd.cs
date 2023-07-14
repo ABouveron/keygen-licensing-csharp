@@ -11,7 +11,7 @@ public abstract class BashCmd
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = "/bin/bash",
+                FileName = "/bin/sh",
                 Arguments = "-c \"" + command + "\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
