@@ -3,7 +3,7 @@
 
 namespace example_csharp_licensing_Docker.api;
 
-public abstract class KeygenApi
+public abstract class TestApi
 {
     public static void Main(string[] args)
     {
