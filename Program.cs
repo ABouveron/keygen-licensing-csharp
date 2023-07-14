@@ -237,6 +237,13 @@ public abstract class Program
     )]
     private static partial Regex WindowsRegex();
 
+    public static async Task Main(string[] args)
+    {
+        Env.Load();
+        await CheckInternet.CheckInternetAsync();
+        TestApi.Main_aux(args);
+    }
+
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class LicenseFile
     {

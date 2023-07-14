@@ -7,7 +7,6 @@ public abstract class TestApi
 {
     public static void Main_aux(string[] args)
     {
-        Env.Load();
-        Console.WriteLine(Product.ProductCreation("test", "https://test.com").Content);
+        Authentication.LicenseAuth("zddz", "zdzd", "zdzdz", "zdzddz", "zdzdz");
     }
 }
