@@ -1,6 +1,6 @@
 namespace example_csharp_licensing_Docker.api;
 
-public class Token
+public abstract class Token
 {
     public static RestResponse GenAdminToken()
     {
