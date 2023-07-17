@@ -234,9 +234,15 @@ public abstract partial class Program
 
     public static async Task Main(string[] args)
     {
-        Env.Load();
-        await CheckInternet.CheckInternetAsync();
-        TestApi.Main_aux(args);
+        if (args[0] == "api")
+        {
+            Env.Load();
+            await CheckInternet.CheckInternetAsync();
+            TestApi.Main_aux();
+            return;
+        }
+
+        Main_aux(args);
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
