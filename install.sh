@@ -1,6 +1,8 @@
 #!/bin/bash
 
-printf "This script only requires you to run it on a Ubuntu environment with Docker installed. If not the case, check their documentation at https://docs.docker.com/get-docker/.\n" 
+printf "This script only requires you to run it on a Ubuntu environment with Docker installed. If not the case, check their documentation at https://docs.docker.com/get-docker/.\n\n" 
+echo "Press any key to continue (or Ctrl-C to cancel)..."
+read -r -s -n 1
 
 # Initial setup
 export KEYGEN_EDITION="CE"
@@ -18,7 +20,12 @@ done < install.env
 export KEYGEN_ACCOUNT_ID=${data[0]}
 
 # Removing already existing containers
-printf "Attempting to delete already existing containers and their volumes (needed if keygen has already been setuped or installation failed).\n"
+printf "\nAttempting to delete already existing containers and their volumes (needed if keygen has already been setup or installation failed).\n"
+printf "Following containers will be stopped and removed: /redis, /postgres, /web.1, /worker.1.\n\n"
+
+echo "Press any key to continue (or Ctrl-C to cancel)..."
+read -r -s -n 1
+
 docker stop /redis
 docker stop /postgres
 docker stop /web.1
@@ -43,6 +50,9 @@ docker run --name redis -d -p 6379:6379 \
   -v redis:/var/lib/redis/data \
   redis
 
+printf "\nThe following will print what you put in install.env. Cancel the script if you do not want it.\n"
+echo "Press any key to continue (or Ctrl-C to cancel)..."
+read -r -s -n 1
 # Redirect data towards keygen setup
 script -q -c "bash install_aux.sh >/dev/null 2>&1" /dev/null <<EOF
 ${data[0]}
@@ -50,7 +60,7 @@ ${data[1]}
 ${data[2]}
 EOF
 
-printf "The next steps use docker and requires sudo level permissions.\n"
+printf "\nThe next steps use docker and requires sudo level permissions.\n"
 
 # Web Container
 docker run -d --name web.1 -p 127.0.0.1:3000:3000 -e SECRET_KEY_BASE="${SECRET_KEY_BASE}" \
@@ -95,4 +105,3 @@ docker run -d --name worker.1 -e SECRET_KEY_BASE="${SECRET_KEY_BASE}" \
 
 # Reverse proxy
 echo '127.0.0.1 api.keygen.localhost' | sudo tee -a /etc/hosts
-caddy reverse-proxy --from api.keygen.localhost --to :3000
