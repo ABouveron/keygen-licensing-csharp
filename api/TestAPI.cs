@@ -7,6 +7,7 @@ public abstract class TestApi
 {
     public static void Main_aux(string[] args)
     {
-        Authentication.LicenseAuth("zddz", "zdzd", "zdzdz", "zdzddz", "zdzdz");
+        Console.WriteLine(Token.GenAdminToken().Content);
+        Console.WriteLine("\nGet the admin token from the response above and put it in .env. You can now edit api/TestAPI.cs.");
     }
 }
