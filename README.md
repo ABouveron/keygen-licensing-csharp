@@ -2,7 +2,18 @@
 
 Original repo : https://github.com/ABouveron/example-csharp-cryptographic-machine-files
 
-# How to run
+# Test official and localhost API
+
+**Linux:**
+
+```shell
+sudo dotnet run api
+```
+
+(You need to run it as root because sending an async ping is limited to root. If not running as root, the official API
+cannot be contacted.)
+
+# Run basic offline file verification
 
 ## Example config:
 
