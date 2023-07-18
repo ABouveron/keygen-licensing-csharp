@@ -12,7 +12,7 @@ public abstract class TestApi
             "\nGet the admin token from the response above and put it in .env. You can now edit api/TestAPI.cs."
         );
         Console.WriteLine(
-            "If there is no output and you are trying to contact localhost API, you probably did not execute the run script (you must execute install script before that)."
+            "If there is no output and you are trying to contact localhost API, you probably did not execute the run script (you must execute the install script before that)."
         );
     }
 }

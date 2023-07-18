@@ -4,7 +4,19 @@ Original repo : https://github.com/ABouveron/example-csharp-cryptographic-machin
 
 # Test official and localhost API
 
-Not functional on Windows.
+The goal of this project is to be able to contact the API while online & offline. The official API can be contacted while online, and the localhost one will be used when you are offline.  
+You can only access the dashboard when online. 
+
+*Not functional on Windows.*
+
+**Requirements:** 
+- Docker
+- scripts working on Ubuntu (other distributions not tested)
+- filling `install.env` with the credentials you want to use in localhost mode
+- filling `.env` *\*_OFFICIAL* and *\*_LOCALHOST* variables with the appropriate values
+
+OFFICIAL values can be found on [keygen.sh](https://app.keygen.sh/settings).  
+A token for the API will be generated on the first run. Execute the run.sh script two times to get both tokens: one while having Internet access and one without.
 
 **Linux:**
 
@@ -15,7 +27,7 @@ source install.sh
 ```shell
 source run.sh
 ```
-
+In another terminal:
 ```shell
 sudo dotnet run api
 ```
