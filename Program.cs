@@ -248,6 +248,7 @@ public abstract partial class Program
                 TestApi.Main_aux();
                 return;
             }
+
             Main_aux(args);
         }
     }
