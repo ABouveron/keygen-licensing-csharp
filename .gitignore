@@ -8,3 +8,4 @@ machine.lic
 license.lic
 !examples/*
 *.env
+/typescript
