@@ -54,7 +54,7 @@ printf "\nThe following will print what you put in install.env. Cancel the scrip
 echo "Press any key to continue (or Ctrl-C to cancel)..."
 read -r -s -n 1
 # Redirect data towards keygen setup
-script -q -c "bash install_aux.sh >/dev/null 2>&1" /dev/null <<EOF
+script -q -c "source install_aux.sh >/dev/null 2>&1" /dev/null <<EOF
 ${data[0]}
 ${data[1]}
 ${data[2]}
