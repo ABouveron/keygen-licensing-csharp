@@ -105,3 +105,6 @@ docker run -d --name worker.1 -e SECRET_KEY_BASE="${SECRET_KEY_BASE}" \
 
 # Reverse proxy
 echo '127.0.0.1 api.keygen.localhost' | sudo tee -a /etc/hosts
+
+# Authorize keygen.localhost to be hosted by caddy on low ports
+sudo setcap CAP_NET_BIND_SERVICE=+eip /usr/bin/caddy
