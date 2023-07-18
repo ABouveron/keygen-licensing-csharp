@@ -45,7 +45,7 @@ public abstract partial class Program
         }
     }
 
-    public static void Main_aux(string[] args)
+    public static void Main_aux(string[]? args)
     {
         try
         {
@@ -53,7 +53,7 @@ public abstract partial class Program
             string pathMachineFile;
             string fingerprint;
 
-            if (args.Length == 0)
+            if (args?.Length == 0)
             {
                 pathLicenseFile = "license.lic";
                 pathMachineFile = "machine.lic";
@@ -84,6 +84,7 @@ public abstract partial class Program
             }
             else
             {
+                Debug.Assert(args != null, nameof(args) + " != null");
                 pathLicenseFile = args[0];
                 pathMachineFile = args[1];
                 fingerprint = args[2];
@@ -232,17 +233,23 @@ public abstract partial class Program
     )]
     private static partial Regex WindowsRegex();
 
-    public static async Task Main(string[] args)
+    public static async Task Main(string[]? args)
     {
-        if (args[0] == "api")
+        if (args == null || args.Length == 0)
         {
-            Env.Load();
-            await CheckInternet.CheckInternetAsync();
-            TestApi.Main_aux();
-            return;
+            Main_aux(args);
         }
-
-        Main_aux(args);
+        else
+        {
+            if (args[0] == "api")
+            {
+                Env.Load();
+                await CheckInternet.CheckInternetAsync();
+                TestApi.Main_aux();
+                return;
+            }
+            Main_aux(args);
+        }
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
