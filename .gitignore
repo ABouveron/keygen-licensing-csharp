@@ -7,3 +7,5 @@ example-csharp-licensing-Docker.sln
 machine.lic
 license.lic
 !examples/*
+*.env
+/typescript

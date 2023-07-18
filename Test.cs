@@ -1,5 +1,3 @@
-using Xunit.Sdk;
-
 namespace example_csharp_licensing_Docker;
 
 public class Test
@@ -19,8 +17,8 @@ public class Test
         Console.SetOut(stringWriter);
 
         // Run the application
-        Program.Main(
-            new string[]
+        Program.Main_aux(
+            new[]
             {
                 "examples/license.lic",
                 "examples/machine.lic",
