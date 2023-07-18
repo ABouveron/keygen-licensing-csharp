@@ -4,7 +4,17 @@ Original repo : https://github.com/ABouveron/example-csharp-cryptographic-machin
 
 # Test official and localhost API
 
+Not functional on Windows.
+
 **Linux:**
+
+```shell
+source install.sh
+```
+
+```shell
+source run.sh
+```
 
 ```shell
 sudo dotnet run api
