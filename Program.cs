@@ -249,7 +249,7 @@ public abstract partial class Program
                     TestApi.Main_aux();
                     return;
                 case "obfuscation":
-                    Main_aux(args[1..]);
+                    await Main(args[1..]);
                     const string reactorPath = @"./dotNET_Reactor";
                     const string commandline = @" -quiet -file ""./bin/Debug/net7.0/example-csharp-licensing-Docker.dll"" -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1 -mapping_file 1 -rules "".*::assemblies:^example-csharp-licensing-Docker.dll$::types:^Target$::where:class""";
                     BashCmd.Execute(reactorPath + commandline);
