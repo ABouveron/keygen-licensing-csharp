@@ -70,6 +70,20 @@ dotnet run
 ## Docker:
 
 ```shell
-docker build . -t license-example-csharp
-docker run -it license-example-csharp
+docker build . -t offlicensecsharp
+docker run -it offlicensecsharp
+```
+
+## Docker Compose:
+
+```shell
+docker compose up
+```
+
+# Obfuscation
+
+Just put `obfuscation` as first argument of the run command to obfuscate the code:
+
+```shell
+dotnet run obfuscation api
 ```
