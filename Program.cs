@@ -236,11 +236,8 @@ public abstract partial class Program
     public static async Task Main(string[]? args)
     {
         if (args == null || args.Length == 0)
-        {
             Main_aux(args);
-        }
         else
-        {
             switch (args[0])
             {
                 case "offlineapi":
@@ -256,14 +253,14 @@ public abstract partial class Program
                 case "obfuscation":
                     await Main(args[1..]);
                     const string reactorPath = @"./dotNET_Reactor";
-                    const string commandline = @" -quiet -file ""./bin/Debug/net7.0/example-csharp-licensing-Docker.dll"" -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1 -mapping_file 1 -rules "".*::assemblies:^example-csharp-licensing-Docker.dll$::types:^Target$::where:class""";
+                    const string commandline =
+                        @" -quiet -file ""./bin/Debug/net7.0/example-csharp-licensing-Docker.dll"" -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1 -mapping_file 1 -rules "".*::assemblies:^example-csharp-licensing-Docker.dll$::types:^Target$::where:class""";
                     BashCmd.Execute(reactorPath + commandline);
                     return;
                 default:
                     Main_aux(args);
                     break;
             }
-        }
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]

@@ -8,20 +8,20 @@ services:
       - licensing_example_network
     
     build: .
-        
+    
     cap_drop:
       - ALL
-      
+    
     security_opt:
       - no-new-privileges:true
       
     deploy:
-      restart_policy: 
+      restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
-      resources: 
+      resources:
         limits:
           cpus: '0.50'
           memory: 512M
@@ -39,7 +39,7 @@ services:
         tmpfs:
           size: 1g
           mode: 1770
-          
+
 networks:
   licensing_example_network:
     driver: bridge

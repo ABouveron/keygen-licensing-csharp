@@ -5,10 +5,10 @@ echo "Press any key to continue (or Ctrl-C to cancel)..."
 read -r -s -n 1
 
 # Initial setup
+docker pull keygen/api:latest
+
 export KEYGEN_EDITION="CE"
 export KEYGEN_MODE="singleplayer"
-
-docker pull keygen/api
 export KEYGEN_HOST="api.keygen.localhost"
 
 while IFS= read -r line
