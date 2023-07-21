@@ -8,4 +8,5 @@ docker run --rm -it -e SECRET_KEY_BASE="$(openssl rand -hex 64)" \
   -e KEYGEN_HOST="api.keygen.localhost" \
   -e KEYGEN_MODE="singleplayer" \
   -e KEYGEN_EDITION="CE" \
+  --add-host host.docker.internal:host-gateway \
   keygen/api setup
