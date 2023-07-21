@@ -1,0 +1,10 @@
+{
+  "output": "CHANGELOG.md",
+  "template": "keepachangelog",
+  "unreleased": true,
+  "commitLimit": false,
+  "ignoreCommitPattern": "(ci|test|fix|doc|refactor|reformat|style|git|build|temp|Docker).*",
+  "sortCommits": "date-desc",
+  "hideEmptyReleases": true,
+  "hideCredit": true
+}
