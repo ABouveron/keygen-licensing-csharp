@@ -243,6 +243,11 @@ public abstract partial class Program
         {
             switch (args[0])
             {
+                case "offlineapi":
+                    Env.Load();
+                    await CheckInternet.GetOfflineApi();
+                    TestApi.Main_aux();
+                    return;
                 case "api":
                     Env.Load();
                     await CheckInternet.CheckInternetAsync();

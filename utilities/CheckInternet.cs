@@ -36,7 +36,7 @@ public abstract class CheckInternet
         {
             // use localhost API api.keygen.localhost
             Console.WriteLine("Switching to localhost API...");
-            Api = "api.keygen.localhost";
+            api = "api.keygen.localhost";
             SetEnvironmentVariable(
                 "KEYGEN_ACCOUNT_ID",
                 GetEnvironmentVariable("KEYGEN_ACCOUNT_ID_LOCALHOST")
@@ -54,5 +54,29 @@ public abstract class CheckInternet
                 GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN_LOCALHOST")
             );
         }
+    }
+
+    public static Task GetOfflineApi()
+    {
+        // use localhost API api.keygen.localhost
+        Console.WriteLine("Switching to localhost API...");
+        api = "api.keygen.localhost";
+        SetEnvironmentVariable(
+            "KEYGEN_ACCOUNT_ID",
+            GetEnvironmentVariable("KEYGEN_ACCOUNT_ID_LOCALHOST")
+        );
+        SetEnvironmentVariable(
+            "KEYGEN_ACCOUNT_EMAIL",
+            GetEnvironmentVariable("KEYGEN_ACCOUNT_EMAIL_LOCALHOST")
+        );
+        SetEnvironmentVariable(
+            "KEYGEN_ACCOUNT_PASSWORD",
+            GetEnvironmentVariable("KEYGEN_ACCOUNT_PASSWORD_LOCALHOST")
+        );
+        SetEnvironmentVariable(
+            "KEYGEN_ADMIN_TOKEN",
+            GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN_LOCALHOST")
+        );
+        return Task.CompletedTask;
     }
 }
