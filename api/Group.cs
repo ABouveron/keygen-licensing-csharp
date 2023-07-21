@@ -11,7 +11,7 @@ public class Group
     {
         var client = new RestClient(
             "https://"
-            + CheckInternet.Api
+            + CheckInternet.api
             + "/v1/accounts/"
             + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
         );

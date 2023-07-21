@@ -4,7 +4,7 @@ namespace example_csharp_licensing_Docker.utilities;
 
 public abstract class CheckInternet
 {
-    public static string Api = "api.keygen.sh";
+    public static string api = "api.keygen.sh";
 
     public static async Task CheckInternetAsync()
     {
@@ -14,7 +14,7 @@ public abstract class CheckInternet
             await myPing.SendPingAsync("google.com", 3000, new byte[32], new PingOptions(64, true));
             // use official API api.keygen.sh
             Console.WriteLine("Using official API...");
-            Api = "api.keygen.sh";
+            api = "api.keygen.sh";
             SetEnvironmentVariable(
                 "KEYGEN_ACCOUNT_ID",
                 GetEnvironmentVariable("KEYGEN_ACCOUNT_ID_OFFICIAL")

@@ -33,7 +33,7 @@ public abstract class Authentication
         Console.WriteLine(
             BashCmd.Execute(
                 "curl -X POST https://"
-                + CheckInternet.Api
+                + CheckInternet.api
                 + "/v1/accounts/"
                 + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
                 + "/machines "
