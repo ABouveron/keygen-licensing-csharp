@@ -14,7 +14,10 @@ services:
     
     security_opt:
       - no-new-privileges:true
-      
+    
+    environment:
+      - DOCKER_CONTENT_TRUST=1
+    
     deploy:
       restart_policy:
         condition: on-failure
