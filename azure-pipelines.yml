@@ -36,7 +36,7 @@ steps:
   - task: DotNetReactorTool@0
     inputs:
       version: "6.9.0.0"
-      license: ''
+      license: '$(licenseDotNetReactor)'
 
   - task: ProtectWithDotNetReactor@1
     displayName: 'Protect with .NET Reactor'
