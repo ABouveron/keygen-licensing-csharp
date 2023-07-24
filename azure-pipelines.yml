@@ -1,0 +1,63 @@
+trigger:
+  branches:
+    include:
+      - official_api_file_fallback
+      - master
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '7.x'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      version: '$(dotnetSdkVersion)'
+
+  - script: dotnet restore --no-cache
+    displayName: 'Restore NuGet packages'
+
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'Build the project'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: "$(Build.SourcesDirectory)/examples/"
+      Contents: "*"
+      TargetFolder: $(Build.SourcesDirectory)/bin/Release/net7.0/examples/
+    displayName: 'Copy examples files to artifacts'
+
+  - script: dotnet test --configuration $(buildConfiguration) --logger trx --no-restore
+    displayName: 'Run unit tests'
+
+  - task: DotNetReactorTool@0
+    inputs:
+      version: "6.9.0.0"
+      license: ''
+
+  - task: ProtectWithDotNetReactor@1
+    displayName: 'Protect with .NET Reactor'
+    inputs:
+      reactorProjectFilePath: '$(Build.SourcesDirectory)\bin\Release\net7.0\examples\example-csharp-licensing-Docker.nrproj'
+      additionalArguments: "-file $(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker.dll  -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1"
+
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker_Secure/'
+      Contents: "*"
+      TargetFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/'
+      OverWrite: true
+    displayName: 'Overwrite original DLL with obfuscated one'
+
+  - script: dotnet test --configuration $(buildConfiguration) --logger trx --no-restore
+    displayName: 'Run unit tests with obfuscated DLL'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.SourcesDirectory)/bin/Release/net7.0/'
+      artifactName: 'drop'
+    displayName: 'Publish artifacts'

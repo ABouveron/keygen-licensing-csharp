@@ -1,0 +1,48 @@
+services:
+  
+  licensing_example:
+    
+    read_only: true
+    
+    networks:
+      - licensing_example_network
+    
+    build: .
+    
+    cap_drop:
+      - ALL
+    
+    security_opt:
+      - no-new-privileges:true
+    
+    environment:
+      - DOCKER_CONTENT_TRUST=1
+    
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    
+    volumes:
+      - type: bind
+        source: ./source
+        target: /bind
+        read_only: true
+      - type: tmpfs
+        target: /tmpfs
+        tmpfs:
+          size: 1g
+          mode: 1770
+
+networks:
+  licensing_example_network:
+    driver: bridge

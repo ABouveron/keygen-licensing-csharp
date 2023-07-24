@@ -1,0 +1,11 @@
+bin/
+obj/
+.vscode/
+.vs/
+.idea/
+example-csharp-licensing-Docker.sln
+machine.lic
+license.lic
+!examples/*
+*.env
+/typescript
