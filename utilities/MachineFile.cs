@@ -1,3 +1,4 @@
+using Environment = System.Environment;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace example_csharp_licensing_Docker.utilities;
