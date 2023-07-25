@@ -42,7 +42,7 @@ steps:
     displayName: 'Protect with .NET Reactor'
     inputs:
       reactorProjectFilePath: '$(Build.SourcesDirectory)\bin\Release\net7.0\examples\example-csharp-licensing-Docker.nrproj'
-      additionalArguments: "-file $(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker.dll  -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1"
+      additionalArguments: "-file $(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker.dll -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1"
 
 
   - task: CopyFiles@2
