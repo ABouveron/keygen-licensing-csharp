@@ -13,7 +13,7 @@ public abstract class CheckInternet
             // use official API api.keygen.sh
             Console.WriteLine("Using official API...");
             api = "api.keygen.sh";
-            TestApi.MainApi();
+            TestApi.MainApi(args);
         }
         catch (Exception)
         {
