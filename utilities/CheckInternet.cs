@@ -36,7 +36,7 @@ public abstract class CheckInternet
             // use official API api.keygen.sh
             Console.WriteLine("Using official API...");
             api = "api.keygen.sh";
-            example_csharp_licensing_Docker.api.Program.LicenseActivationMain(args);
+            LicenseActivationAux.LicenseActivationMain(args);
         }
         catch (Exception)
         {

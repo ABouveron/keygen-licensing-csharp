@@ -131,7 +131,7 @@ public class LicenseActivation
     }
 }
 
-internal abstract class Program
+internal abstract class LicenseActivationAux
 {
     private static async Task MainAsync(string[] args)
     {
