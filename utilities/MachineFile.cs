@@ -39,21 +39,10 @@ public abstract partial class MachineFile
                     );
                     return;
                 }
-
-                Console.WriteLine("Serial number : " + serialNumber);
-
-                // Compute machine file fingerprint
-                var hashAlgorithm = new Sha3Digest(512);
-                var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
-                hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
-                var result = new byte[hashAlgorithm.GetDigestSize()];
-                hashAlgorithm.DoFinal(result, 0);
-                fingerprint = BitConverter.ToString(result);
-                fingerprint = fingerprint.Replace("-", "").ToLower();
-
-                Console.WriteLine("Replace \"PUBLIC_KEY\" line 96 with your public key (\"Ed25519 128-bit Verify Key\") available in https://app.keygen.sh/settings. Then comment lines 94 & 95 and run again.");
-                return;  // Comment this line to continue
-                _publicKey = "PUBLIC_KEY";
+                
+                fingerprint = SerialNumber.GetHash(serialNumber);
+                
+                _publicKey = Environment.GetEnvironmentVariable("KEYGEN_PUBLIC_KEY") ?? throw new InvalidOperationException("KEYGEN_PUBLIC_KEY is null. Fill .env.");
             }
             else
             {

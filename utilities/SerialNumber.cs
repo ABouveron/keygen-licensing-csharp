@@ -37,4 +37,16 @@ public abstract class SerialNumber
             return null;
         }
     }
+
+    public static string GetHash(string serialNumber)
+    {
+        var hashAlgorithm = new Sha3Digest(512);
+        var serialNumberBytes = Encoding.UTF8.GetBytes(serialNumber);
+        hashAlgorithm.BlockUpdate(serialNumberBytes, 0, serialNumberBytes.Length);
+        var result = new byte[hashAlgorithm.GetDigestSize()];
+        hashAlgorithm.DoFinal(result, 0);
+        var fingerprint = BitConverter.ToString(result);
+        fingerprint = fingerprint.Replace("-", "").ToLower();
+        return fingerprint;
+    }
 }
