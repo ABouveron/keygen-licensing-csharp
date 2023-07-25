@@ -22,7 +22,7 @@ public abstract class SerialNumber
             if (geteuid() != 0)
             {
                 Console.WriteLine(
-                    "You must be root to get the serial number. Execute again with \"sudo dotnet run\"."
+                    "You must be root to get the serial number. Execute again with \"sudo\"."
                 );
                 return null;
             }
