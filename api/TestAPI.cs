@@ -5,7 +5,7 @@ namespace example_csharp_licensing_Docker.api;
 
 public abstract class TestApi
 {
-    public static void MainApi()
+    public static void MainApi(string[] args)
     {
         Console.WriteLine(Token.GenAdminToken().Content);
         Console.WriteLine(
