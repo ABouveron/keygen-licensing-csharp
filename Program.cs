@@ -16,8 +16,16 @@ public abstract class Program
                 case "api":
                     await CheckInternet.CheckInternetTest(args[1..]);
                     return;
-                case "periodic":
+                case "timecheck":
                     await CheckInternet.CheckInternetPeriodic(args[1..]);
+                    return;
+                case "fingerprint":
+                    var serialNumber = SerialNumber.GetSerialNumber();
+                    Debug.Assert(serialNumber != null, nameof(serialNumber) + " != null");
+                    Console.WriteLine(SerialNumber.GetHash(serialNumber));
+                    return;
+                case "serialnumber":
+                    Console.WriteLine(SerialNumber.GetSerialNumber());
                     return;
                 default:
                     MachineFile.Verification(args);
