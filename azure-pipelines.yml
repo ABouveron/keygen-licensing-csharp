@@ -53,7 +53,7 @@ steps:
 #      OverWrite: true
 #    displayName: 'Overwrite original DLL with obfuscated one'
 #
-  - script: dotnet test /bin/Release/net7.0/example-csharp-licensing-Docker_Secure/example-csharp-licensing-Docker.dll --configuration $(buildConfiguration) --logger trx
+  - script: dotnet test ./bin/Release/net7.0/example-csharp-licensing-Docker_Secure/example-csharp-licensing-Docker.dll --configuration $(buildConfiguration) --logger trx
     displayName: 'Run unit tests with obfuscated DLL'
 
   - task: PublishBuildArtifacts@1
