@@ -45,13 +45,13 @@ steps:
       additionalArguments: "-file $(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker.dll  -antitamp 1 -anti_debug 1 -hide_calls 1 -control_flow 1 -flow_level 9 -resourceencryption 1 -virtualization 1 -necrobit 1"
 
 
-#  - task: CopyFiles@2
-#    inputs:
-#      SourceFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker_Secure/'
-#      Contents: "*"
-#      TargetFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/'
-#      OverWrite: true
-#    displayName: 'Overwrite original DLL with obfuscated one'
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker_Secure/'
+      Contents: "*"
+      TargetFolder: '$(Build.SourcesDirectory)/bin/Release/net7.0/'
+      OverWrite: true
+    displayName: 'Overwrite original DLL with obfuscated one'
 #
 #  - script: dotnet test --configuration $(buildConfiguration) --logger trx --no-restore
 #    displayName: 'Run unit tests with obfuscated DLL'
