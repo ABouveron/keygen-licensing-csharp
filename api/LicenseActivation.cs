@@ -210,6 +210,11 @@ internal abstract class Program
             validation.Meta.Valid,
             device != null
         );
+
+        if (validation.Meta.Valid)
+        {
+            Console.WriteLine("Hello, World!");
+        }
     }
 
     public static void LicenseActivationMain(string[] args)
