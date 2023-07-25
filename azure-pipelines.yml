@@ -66,3 +66,9 @@ steps:
       pathtoPublish: '$(Build.SourcesDirectory)/bin/Release/net7.0/example-csharp-licensing-Docker_Secure/'
       artifactName: 'obfuscated files'
     displayName: 'Publish obfuscated files'
+    
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.SourcesDirectory)/bin/Release/net7.0/'
+      artifactName: 'obfuscated files 2'
+    displayName: 'Publish obfuscated files 2'
