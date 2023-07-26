@@ -67,6 +67,10 @@ dotnet run examples/license.lic examples/machine.lic 198e9fe586114844f6a4eaca506
 ## Normal config:
 
 * Your fingerprint should be the hash of the serial number of your machine computed with **SHA3_512** ([Online Converter](https://emn178.github.io/online-tools/sha3_512.html)).
+You can get it with the following command:
+```shell
+dotnet run fingerprint
+```
 * Fill the `.env` file with your [keygen.sh](https://keygen.sh) public key.
 * Get your machine file on [keygen.sh](https://keygen.sh) and put the raw license key in a new file named `license.lic`.
 * Put your `machine.lic` & `license.lic` in the same folder as `Program.cs` and run:
