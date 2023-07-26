@@ -56,9 +56,9 @@ dotnet run timecheck timespan licenseKey fingerprint
 
 # Run basic offline file verification
 
-## Example config:
+*The commands listed often need to have root access on Linux, so execute them with `sudo`.*
 
-**Linux / Windows:**
+## Example config:
 
 ```shell 
 dotnet run examples/license.lic examples/machine.lic 198e9fe586114844f6a4eaca5069b41a7ed43fb5a2df84892b69826d64573e39
@@ -71,16 +71,6 @@ dotnet run examples/license.lic examples/machine.lic 198e9fe586114844f6a4eaca506
 * Fill the `.env` file with your [keygen.sh](https://keygen.sh) public key.
 * Get your machine file on [keygen.sh](https://keygen.sh) and put the raw license key in a new file named `license.lic`.
 * Put your `machine.lic` & `license.lic` in the same folder as `Program.cs` and run:
-
-**Linux:**
-
-```shell
-sudo dotnet run
-```
-
-(You need to run it as root because it needs to access `/dev/sda` to get the serial number of your machine.)
-
-**Windows:**
 
 ```shell
 dotnet run
