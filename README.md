@@ -59,8 +59,8 @@ dotnet run timecheck timespan licenseKey fingerprint
 *The commands listed often need to have root access on Linux, so execute them with `sudo`.*
 
 ## Example config:
- 
-```shell 
+
+```shell
 dotnet run examples/license.lic examples/machine.lic 198e9fe586114844f6a4eaca5069b41a7ed43fb5a2df84892b69826d64573e39
 ```
 
