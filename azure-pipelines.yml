@@ -1,8 +1,8 @@
 trigger:
   branches:
     include:
-      - official_api_file_fallback
-      - master
+      - official-api-file-fallback
+      - localhost-api-docker
 
 pool:
   vmImage: 'windows-2019'
