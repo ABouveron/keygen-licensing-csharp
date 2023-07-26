@@ -10,6 +10,9 @@ public abstract class Program
         else
             switch (args[0])
             {
+                case "testapi":
+                    TestApi.MainApi(args[1..]);
+                    return;
                 case "license":
                     await CheckInternet.CheckInternetLicense(args[1..]);
                     return;
