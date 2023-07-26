@@ -10,7 +10,7 @@ public abstract class Authentication
         string fingerprint
     )
     {
-        var jsonLicenseKeyAuth = new JsonKeygen
+        var jsonLicenseKeyAuth = new Token
         {
             data = new Data
             {
@@ -25,7 +25,7 @@ public abstract class Authentication
                 {
                     license = new License
                     {
-                        data = new LicenseData { type = "licenses", id = licenseId }
+                        data = new Data { type = "licenses", id = licenseId }
                     }
                 }
             }

@@ -2,7 +2,7 @@ using example_csharp_licensing_Docker.api.attributes;
 
 namespace example_csharp_licensing_Docker.api;
 
-public class Policy
+public partial class Policy
 {
     public static RestResponse PolicyCreation(
         string name,

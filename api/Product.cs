@@ -2,7 +2,7 @@ using example_csharp_licensing_Docker.api.attributes;
 
 namespace example_csharp_licensing_Docker.api;
 
-public class Product
+public partial class Product
 {
     public static RestResponse ProductCreation(
         string name,

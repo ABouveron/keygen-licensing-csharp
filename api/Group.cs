@@ -1,6 +1,6 @@
 namespace example_csharp_licensing_Docker.api;
 
-public class Group
+public partial class Group
 {
     public static RestResponse GroupCreation(
         string name,

@@ -1,6 +1,6 @@
 namespace example_csharp_licensing_Docker.api;
 
-public class Entitlement
+public partial class Entitlement
 {
     public static RestResponse EntitlementCreation(string name, string code)
     {
