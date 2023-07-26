@@ -1,6 +1,8 @@
-# Sources
+# About
 
 Original repo : https://github.com/ABouveron/example-csharp-cryptographic-machine-files
+* Official API & file fallback if offline on default branch. 
+* Localhost Docker implementation on localhost-api-docker branch.
 
 # Official API interaction + machine file fallback if offline
 *The commands listed often need to have root access on Linux, so execute them with `sudo`.*  
