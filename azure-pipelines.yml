@@ -32,7 +32,7 @@ steps:
 
   - script: dotnet test --configuration $(buildConfiguration) --logger trx --no-restore
     displayName: 'Run unit tests'
-    
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: '$(Build.SourcesDirectory)/bin/Release/net7.0/'

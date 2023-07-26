@@ -4,7 +4,7 @@ namespace example_csharp_licensing_Docker.api;
 
 public class LicenseActivation
 {
-    private RestClient client;
+    private readonly RestClient client;
 
     public LicenseActivation(string accountId)
     {
@@ -23,12 +23,16 @@ public class LicenseActivation
         request.AddJsonBody(
             new
             {
-                meta = new { key = licenseKey, scope = new { fingerprint = deviceFingerprint, } }
+                meta = new { key = licenseKey, scope = new { fingerprint = deviceFingerprint } }
             }
         );
 
         var response = await client.ExecuteAsync<Document<License, Validation>>(request);
-        if ((response.Data ?? throw new Exception("response.Data null. License probably invalid")).Errors.Count > 0)
+        if (
+            (response.Data ?? throw new Exception("response.Data null. License probably invalid"))
+            .Errors
+            .Count > 0
+        )
         {
             var err = response.Data.Errors[0];
 
@@ -63,15 +67,15 @@ public class LicenseActivation
                 data = new
                 {
                     type = "machine",
-                    attributes = new { fingerprint = deviceFingerprint, },
+                    attributes = new { fingerprint = deviceFingerprint },
                     relationships = new
                     {
-                        license = new { data = new { type = "license", id = licenseId, } }
+                        license = new { data = new { type = "license", id = licenseId } }
                     }
                 }
             }
         );
-        
+
         var response = await client.ExecuteAsync<Document<Machine>>(request);
         if ((response.Data ?? throw new Exception("Invalid License")).Errors.Count > 0)
         {
@@ -111,11 +115,10 @@ public class LicenseActivation
 
     public class Validation
     {
-        public Boolean Valid { get; set; }
+        public bool Valid { get; set; }
         public string? Detail { get; set; }
 
-        [JsonPropertyName("code")]
-        public string? Code { get; set; }
+        [JsonPropertyName("code")] public string? Code { get; set; }
     }
 
     public class License
@@ -135,8 +138,10 @@ internal abstract class LicenseActivationAux
 {
     private static async Task MainAsync(string[] args)
     {
-        var keygen = new LicenseActivation(System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID") ?? 
-                                           throw new Exception("KEYGEN_ACCOUNT_ID is null. Please set it in .env file."));
+        var keygen = new LicenseActivation(
+            System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID")
+            ?? throw new Exception("KEYGEN_ACCOUNT_ID is null. Please set it in .env file.")
+        );
 
         // Keep a reference to the current license and device
         LicenseActivation.License license;
@@ -148,7 +153,10 @@ internal abstract class LicenseActivationAux
             args[1] // device fingerprint
         );
         Console.WriteLine(
-            (validation.Meta ?? throw new Exception("validation.Meta null. License probably invalid")).Valid
+            (
+                validation.Meta
+                ?? throw new Exception("validation.Meta null. License probably invalid")
+            ).Valid
                 ? "[INFO] [ValidateLicense] Valid={0} ValidationCode={1}"
                 : "[INFO] [ValidateLicense] Invalid={0} ValidationCode={1}",
             validation.Meta.Detail,
@@ -156,7 +164,9 @@ internal abstract class LicenseActivationAux
         );
 
         // Store license data
-        license = validation.Data ?? throw new Exception("validation.Data null. License probably invalid");
+        license =
+            validation.Data
+            ?? throw new Exception("validation.Data null. License probably invalid");
 
         // Activate the current machine if it is not already activated (based on validation code)
         switch (validation.Meta.Code)
@@ -184,22 +194,23 @@ internal abstract class LicenseActivationAux
                     args[0], // license key
                     args[1] // device fingerprint
                 );
-                if ((validation.Meta ?? throw new Exception("validation.Meta null. License probably invalid")).Valid)
-                {
+                if (
+                    (
+                        validation.Meta
+                        ?? throw new Exception("validation.Meta null. License probably invalid")
+                    ).Valid
+                )
                     Console.WriteLine(
                         "[INFO] [ValidateLicense] Valid={0} ValidationCode={1}",
                         validation.Meta.Detail,
                         validation.Meta.Code
                     );
-                }
                 else
-                {
                     Console.WriteLine(
                         "[INFO] [ValidateLicense] Invalid={0} ValidationCode={1}",
                         validation.Meta.Detail,
                         validation.Meta.Code
                     );
-                }
 
                 break;
         }
@@ -211,10 +222,7 @@ internal abstract class LicenseActivationAux
             device != null
         );
 
-        if (validation.Meta.Valid)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        if (validation.Meta.Valid) Console.WriteLine("Hello, World!");
     }
 
     public static void LicenseActivationMain(string[] args)

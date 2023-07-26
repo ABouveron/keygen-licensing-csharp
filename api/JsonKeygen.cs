@@ -4,77 +4,79 @@ namespace example_csharp_licensing_Docker.api;
 
 public class Attributes
 {
-    // license definition
-    public string? name;
-    public string? key;
-    public string? expiry;
-    public string? status;
-    public int? uses;
-    public bool @protected;
-    public string? version;
-    public bool suspended;
-    public bool encrypted;
-    public bool floating;
-    public string? scheme;
-    public bool strict;
-    public int? maxMachines;
-    public int? maxProcesses;
-    public int? maxCores;
-    public int? maxUses;
-    public bool requireHeatbeat;
-    public bool requireCheckIn;
-    public string? lastValidated;
-    public string? lastCheckOut;
-    public string? lastCheckIn;
-    public string? nextCheckIn;
-    public string[]? permissions;
-    public Dictionary<string, object>? metadata;
+    public int cores;
     public string? created;
-    public string? updated;
-    
+    public bool encrypted;
+    public string? expiry;
+
     // machine definition
     public string? fingerprint;
-    public int cores;
-    public string? ip;
-    public string? hostname;
-    public string? platform;
-    public string? heartbeatStatus;
+    public bool floating;
     public int heartbeatDuration;
+    public string? heartbeatStatus;
+    public string? hostname;
+    public string? ip;
+    public string? key;
+    public string? lastCheckIn;
+    public string? lastCheckOut;
     public string? lastHearbeat;
+    public string? lastValidated;
+    public int? maxCores;
+    public int? maxMachines;
+    public int? maxProcesses;
+    public int? maxUses;
+
+    public Dictionary<string, object>? metadata;
+
+    // license definition
+    public string? name;
+    public string? nextCheckIn;
     public string? nextHeartbeat;
+    public string[]? permissions;
+    public string? platform;
+    public bool @protected;
+    public bool requireCheckIn;
+    public bool requireHeatbeat;
+    public string? scheme;
+    public string? status;
+    public bool strict;
+    public bool suspended;
+    public string? updated;
+    public int? uses;
+    public string? version;
 }
 
 public class Data
 {
-    public string? id;
-    public string? type;
     public Attributes? attributes;
-    public Relationships? relationships;
+    public string? id;
     public Links? links;
+    public Relationships? relationships;
+    public string? type;
 }
 
 public class Links
 {
-    public string? self;
     public string? related;
+    public string? self;
 }
 
 public class Relationships
 {
     // license definition
     public Account? account;
-    public Product? product;
-    public Policy? policy;
-    public Group? group;
-    public User? user;
-    public Machine? machines;
-    public EnvironmentK? environment;
-    public Token? tokens;
     public Entitlement? entitlements;
-    
+    public EnvironmentK? environment;
+    public Group? group;
+
     // machine definition
     public License? license;
+    public Machine? machines;
+    public Policy? policy;
     public string[]? processes;
+    public Product? product;
+    public Token? tokens;
+    public User? user;
 }
 
 public partial class Entitlement
@@ -84,14 +86,14 @@ public partial class Entitlement
 
 public partial class Token
 {
-    public Links? links;
     public Data? data;
+    public Links? links;
 }
 
 public partial class Machine
 {
-    public Links? links;
     public Meta? data;
+    public Links? links;
 }
 
 public class Meta
@@ -100,7 +102,8 @@ public class Meta
     public int? count;
 }
 
-public partial class Group{
+public partial class Group
+{
     public Links? links;
 }
 
@@ -116,14 +119,14 @@ public class EnvironmentK
 
 public partial class Product
 {
-    public Links? links;
     public Data? data;
+    public Links? links;
 }
 
 public class Account
 {
-    public Links? links;
     public Data? data;
+    public Links? links;
 }
 
 public partial class License
@@ -133,39 +136,39 @@ public partial class License
 
 public partial class Policy
 {
-    public string? name;
-    public string? productId;
-    public int? duration;
-    public string? scheme;
-    public bool strict;
-    public bool floating;
-    public bool requireProductScope;
-    public bool requirePolicyScope;
-    public bool requireMachineScope;
-    public bool requireFingerprintScope;
-    public bool requireUserScope;
-    public bool requireCheckIn;
+    public string? authenticationStrategy;
     public string? checkInInterval;
     public int? checkInIntervalCount;
-    public bool usePool;
-    public int? maxMachines;
-    public int? maxProcesses;
-    public int? maxCores;
-    public int? maxUses;
-    public bool protectedParam;
-    public bool requireHeartbeat;
-    public int? heartbeatDuration;
-    public string? heartbeatCullStrategy;
-    public string? heartbeatResurrectionStrategy;
-    public string? heartbeatBasis;
-    public string? fingerprintUniquenessStrategy;
-    public string? fingerprintMatchingStrategy;
-    public string? expirationStrategy;
+    public Data? data;
+    public int? duration;
     public string? expirationBasis;
-    public string? transferStrategy;
-    public string? authenticationStrategy;
-    public string? overageStrategy;
+    public string? expirationStrategy;
+    public string? fingerprintMatchingStrategy;
+    public string? fingerprintUniquenessStrategy;
+    public bool floating;
+    public string? heartbeatBasis;
+    public string? heartbeatCullStrategy;
+    public int? heartbeatDuration;
+    public string? heartbeatResurrectionStrategy;
     public string? leasingStrategy;
     public Links? links;
-    public Data? data;
+    public int? maxCores;
+    public int? maxMachines;
+    public int? maxProcesses;
+    public int? maxUses;
+    public string? name;
+    public string? overageStrategy;
+    public string? productId;
+    public bool protectedParam;
+    public bool requireCheckIn;
+    public bool requireFingerprintScope;
+    public bool requireHeartbeat;
+    public bool requireMachineScope;
+    public bool requirePolicyScope;
+    public bool requireProductScope;
+    public bool requireUserScope;
+    public string? scheme;
+    public bool strict;
+    public string? transferStrategy;
+    public bool usePool;
 }

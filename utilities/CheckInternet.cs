@@ -50,7 +50,11 @@ public abstract class CheckInternet
         await PeriodicCheck(args[1..], TimeSpan.FromSeconds(int.Parse(args[0])));
     }
 
-    private static async Task PeriodicCheck(string[] args, TimeSpan interval, CancellationToken cancellationToken = default)
+    private static async Task PeriodicCheck(
+        string[] args,
+        TimeSpan interval,
+        CancellationToken cancellationToken = default
+    )
     {
         while (true)
         {

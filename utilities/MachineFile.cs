@@ -40,10 +40,12 @@ public abstract partial class MachineFile
                     );
                     return;
                 }
-                
+
                 fingerprint = SerialNumber.GetHash(serialNumber);
-                
-                _publicKey = Environment.GetEnvironmentVariable("KEYGEN_PUBLIC_KEY") ?? throw new InvalidOperationException("KEYGEN_PUBLIC_KEY is null. Fill .env.");
+
+                _publicKey =
+                    Environment.GetEnvironmentVariable("KEYGEN_PUBLIC_KEY")
+                    ?? throw new InvalidOperationException("KEYGEN_PUBLIC_KEY is null. Fill .env.");
             }
             else
             {
