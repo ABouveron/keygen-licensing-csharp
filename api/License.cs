@@ -2,6 +2,15 @@ namespace example_csharp_licensing_Docker.api;
 
 public partial class License
 {
+    public int GetUses()
+    {
+        return data?.attributes?.uses ?? 0;
+    }
+
+    public string GetKey()
+    {
+        return data?.attributes?.key ?? "";
+    }
     public static RestResponse Creation()
     {
         var client = new RestClient("https://api.keygen.sh/v1/accounts/" + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID"));
@@ -30,5 +39,32 @@ public partial class License
         });
  
         return client.Execute(request);
+    }
+
+    public static License Retrieve(string licenseId)
+    {
+        var client = new RestClient("https://api.keygen.sh/v1/accounts/" + System.Environment.GetEnvironmentVariable("KEYGEN_ACCOUNT_ID"));
+        var request = new RestRequest(
+            "licenses/" + licenseId
+        );
+
+        request.AddHeader("Accept", "application/vnd.api+json");
+        request.AddHeader("Authorization", "Bearer " + System.Environment.GetEnvironmentVariable("KEYGEN_ADMIN_TOKEN"));
+
+        var response = client.Execute(request);
+        var license = JsonToLicense(response.Content ?? throw new InvalidOperationException("response.Content == null"));
+        return license;
+    }
+
+    public void PrintInfos()
+    {
+        Console.WriteLine("Uses = " + GetUses());
+        Console.WriteLine("Key = " + GetKey());
+    }
+
+    private static License JsonToLicense(string json)
+    {
+        var license = JsonConvert.DeserializeObject<License>(json) ?? throw new InvalidOperationException("JsonConvert.DeserializeObject<License>(json) == null");
+        return license;
     }
 }
